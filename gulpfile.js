@@ -12,7 +12,6 @@ var plugins = require("gulp-load-plugins")();
 var minifyCSS = require("gulp-minify-css");
 var fs = require("fs");
 
-gulp.task("moveToBuild", moveToBuild)
 
 var buildFiles = [
 	"fav.png",
@@ -31,6 +30,7 @@ function moveToBuild() {
 	
 	gulp.src(buildFiles).pipe(gulp.dest("docs"));
 }
+gulp.task("moveToBuild", moveToBuild)
 
 /* BROWSER SYNC
 * Starts bower server
@@ -45,16 +45,14 @@ gulp.task("browser-sync", function () {
 	});
 });
 
-var styles = ["src/**/*.css"]
-gulp.task("minifyCSS", css);
-
 function css() {
 	gulp.src(styles)
 		.pipe(minifyCSS())
 		.pipe(plugins.concat("e1.min.css"))
 		.pipe(gulp.dest("dist"))
 }
-
+var styles = ["src/**/*.css"]
+gulp.task("minifyCSS", css);
 
 var babelPlugins = [
 	require("babel-plugin-transform-es2015-modules-commonjs"),
@@ -71,11 +69,7 @@ var bundle = watchify(browserify(bableOptions)
 		presets: [require("babel-preset-env")],
 		plugins: babelPlugins
 	})
-);
-
-gulp.task("bundle", bundleJS);
-bundle.on("update", bundleJS);
-bundle.on("log", plugins.util.log);
+)
 
 function bundleJS() {
 	return bundle.bundle()
@@ -88,6 +82,10 @@ function bundleJS() {
 		.pipe(gulp.dest("./dist"))
 		.on("end", function () { plugins.util.log("Done!"); });
 }
+
+gulp.task("bundle", bundleJS);
+bundle.on("update", bundleJS);
+bundle.on("log", plugins.util.log);
 
 
 gulp.task("live", function () {
