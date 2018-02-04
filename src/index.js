@@ -1,3 +1,8 @@
 require("./e1")
 require("./dropdown-list")
 require("./e1-value")
+require("./e1-content")
+require("./e1-class")
+require("./e1-show")
+require("./e1-if")
+require("./e1-test")

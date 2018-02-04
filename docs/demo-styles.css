@@ -29,7 +29,7 @@ input, textarea{
     border: none;
     font-family: sans-serif;
     font-size: 14px;
-    padding: 4px;
+    padding: 7px;
     color: #d4d6da;
     width: 100%;
     box-sizing: border-box;
@@ -39,9 +39,31 @@ textarea{
     min-height: 70px;
 }
 
+input, textarea, button{
+    outline: none !important;
+}
+
+input[type="checkbox"]{
+    width: auto;
+}
+
+code{
+    background: #282c2f;
+    padding: 14px 7px;
+    box-sizing: border-box;
+    width: 100%;
+    display: block;
+    font-size: 12px;
+    overflow: auto;
+}
+
 .box{
     margin: 14px 0px;
     padding: 21px;
     box-sizing: border-box;
     background: #17191b;
+}
+
+.group{
+    margin-bottom: 70px;
 }

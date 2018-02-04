@@ -76,7 +76,7 @@ class DropdownList {
 		var optionContainer = window.document.createElement("div")
 		optionContainer.className = "dropdown-list-options"
 
-		if (this.list.length) {
+		if (this.list && this.list.length) {
 			this.list.forEach((option, key) => {
 				var optionWrapper = window.document.createElement("div")
 				optionWrapper.className = "dropdown-list-option"

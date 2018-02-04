@@ -3,6 +3,7 @@ class E1 {
 		this.bindings = {}
 		this.components = {}
 		this.models = {}
+		this.services = {}
 		this.subscriptions = {}
 		this.ids = []
 
@@ -102,7 +103,20 @@ class E1 {
 			return defaultValue
 		}
 
-		return this.getThis(window, path, defaultValue)
+		path = path.split(".")
+
+		var service = path.shift()
+
+		if(this.services[service]){
+			service = this.services[service]
+		}else{
+			path.unshift(service)
+			service = window
+		}
+
+		path = path.join(".")
+
+		return this.getThis(service, path, defaultValue)
 	}
 
 	getThis(el, path, emptyVal) {
@@ -210,13 +224,24 @@ class E1 {
 			var attributeValue = attributes[i].value
 
 			if (attributeValue.substring(0, 1) === "@") {
-				if (!this.bindings[attributeValue]) {
-					this.bindings[attributeValue] = []
-				}
+				var bindings = attributeValue.split(",").map(b=>{return b.trim()})
 
-				this.bindings[attributeValue].push(el)
+				bindings.forEach(binding=>{
+					var conditionalBinding = binding.split(":")[0]
+					
+					if (!this.bindings[conditionalBinding]) {
+						this.bindings[conditionalBinding] = []
+					}
+	
+					this.bindings[conditionalBinding].push(el)
+				})
 			}
 		}
+	}
+
+	registerService(name, service){
+		this.services[name] = service
+		this.updateBindings("@" + name, service)
 	}
 
 	scan(element) {
@@ -248,13 +273,27 @@ class E1 {
 			return false
 		}
 
-		var clone = this.getThis(window, path)
+		var boundPath = path
+		path = path.split(".")
+
+		var service = path.shift()
+
+		if(this.services[service]){
+			service = this.services[service]
+		}else{
+			path.unshift(service)
+			service = window
+		}
+
+		path = path.join(".")
+
+		var clone = this.getThis(service, path)
 
 		try { clone = JSON.parse(JSON.stringify(clone)) } catch (e) { }
 
-		this.setThis(window, path, value)
+		this.setThis(service, path, value)
 
-		var newVal = this.getThis(window, path)
+		var newVal = this.getThis(service, path)
 
 		var updated = clone
 
@@ -266,7 +305,7 @@ class E1 {
 			}
 		} catch (e) { }
 
-		this.updateBindings("@" + path, updated)
+		this.updateBindings("@" + boundPath, updated)
 
 		return newVal
 	}

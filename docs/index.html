@@ -14,11 +14,9 @@
 	<body>
 		<div class="group">
 			<h1>dropdown-list</h1>
-			
 			<div style="padding: 21px;">
 				<dropdown-list list="@demoService.dropdown.list" label="@demoService.dropdown.label"></dropdown-list>
 			</div>
-			
 			<div class="box">
 				<h3>Attributes</h3>
 				<div>
@@ -30,7 +28,71 @@
 					<textarea e1-value="@demoService.dropdown.list"></textarea>
 				</div>
 			</div>
-			
+		</div>
+
+
+		<div class="group">
+			<h1>e1-value</h1>
+			<div style="padding: 21px;">
+				<input type="text" e1-value="@demoService.e1Value" />
+				<p>And the result: <span e1-content="@demoService.e1Value"></span></p>
+			</div>
+		</div>
+
+		<div class="group">
+			<h1>e1-content</h1>
+			<div style="padding: 21px;">
+				<input type="text" e1-value="@demoService.e1Value" />
+				<p>And the result: <span e1-content="@demoService.e1Value"></span></p>
+			</div>
+		</div>
+
+		<div class="group">
+			<h1>e1-if</h1>
+			<div style="padding: 21px;">
+				<p>Render if attribute has a truthy value: <span e1-if="@demoService.trueFalse" e1-content="@demoService.ifContent"></span></p>
+				<div><span>Render outer</span><input type="checkbox" e1-value="@demoService.trueFalse" /></div>
+				<div><span>Render inner</span><input type="checkbox" e1-value="@demoService.trueFalse2" /></div>
+			</div>
+		</div>
+
+		<div class="group">
+			<h1>e1-show</h1>
+			<div style="padding: 21px;">
+				<p>Show if attribute has a truthy value: <span e1-show="@demoService.trueFalse">Outer value is true <span e1-show="@demoService.trueFalse2">, inner value is true</span></span></p>
+				<div><span>Show outer</span><input type="checkbox" e1-value="@demoService.trueFalse" /></div>
+				<div><span>Show inner</span><input type="checkbox" e1-value="@demoService.trueFalse2" /></div>
+			</div>
+		</div>
+
+		<div class="group">
+			<h1>e1-class</h1>
+			<style e1-content="@demoService.styles"></style>
+			<div style="padding: 21px;">
+				<label>Write some classes</label>
+				<textarea e1-value="@demoService.styles"></textarea>
+			</div>
+			<div style="padding: 21px;">
+				<p e1-class="@demoService.e1ClassString">This has a simple class: <span e1-content="@demoService.e1ClassString"></span></p>
+				<p><pre><code>e1-class="@demoService.e1ClassString"</code></pre></p>
+				<input type="text" e1-value="@demoService.e1ClassString" />
+			</div>
+			<div style="padding: 21px;">
+				<p e1-class="@demoService.e1ClassString, @demoService.e1ClassString2">This has multiple classes, separated by a comma</p>
+				<p><pre><code> e1-class="@demoService.e1ClassString, @demoService.e1ClassString2"</code></pre></p>
+				<input type="text" e1-value="@demoService.e1ClassString" />
+				<input type="text" e1-value="@demoService.e1ClassString2" style="margin-top: 7px;" />
+			</div>
+			<div style="padding: 21px;">
+				<p e1-class="@demoService.trueFalse: @demoService.e1ClassString, @demoService.trueFalse2: @demoService.e1ClassString2">This has conditional classes, separated by ":", i.e condition:class. Class can be bound or a string literal</p>
+				<p><pre><code>e1-class="@demoService.trueFalse: @demoService.e1ClassString, @demoService.trueFalse2: @demoService.e1ClassString2"</code></pre></p>
+				<div>
+					<span>Blue</span><input type="checkbox" e1-value="@demoService.trueFalse" />
+				</div>
+				<div>
+					<span>Bold</span><input type="checkbox" e1-value="@demoService.trueFalse2" />
+				</div>
+			</div>
 		</div>
 		
 		<script src="e1.min.js"></script>

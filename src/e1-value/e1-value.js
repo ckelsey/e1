@@ -6,10 +6,13 @@ class E1Value {
         this.value = window.E1.getModel(this.el, "e1-value")
         this.valueType = this.typeOfValue(this.value)
 
-        this.el.setAttribute("value", window.E1.getModel(this.el, "e1-value"))
+        this.setValue()
 
-        if (this.el.nodeName.toLowerCase() === "textarea") {
-            this.el.innerHTML = window.E1.getModel(this.el, "e1-value")
+        if(this.el.type === "checkbox"){
+            this.el.addEventListener("click", () => {
+                window.E1.setModel(this.el, "e1-value", this.el.checked)
+            })
+            return
         }
 
         this.el.addEventListener("input", () => {
@@ -60,10 +63,24 @@ class E1Value {
         return
     }
 
-    update() {
-        this.value = window.E1.getModel(this.el, "e1-value")
-        this.valueType = this.typeOfValue(this.value)
+    setValue(){
         this.el.setAttribute("value", window.E1.getModel(this.el, "e1-value"))
+
+        if (this.el.nodeName.toLowerCase() === "textarea") {
+            this.el.innerHTML = window.E1.getModel(this.el, "e1-value")
+        }
+
+        if (this.el.type === "checkbox") {
+            if(this.value){
+                this.el.setAttribute("checked", true)
+            }else{
+                this.el.removeAttribute("checked")
+            }
+        }
+    }
+
+    update() {
+        this.setValue()
     }
 }
 
