@@ -45,13 +45,13 @@ gulp.task("browser-sync", function () {
 	});
 });
 
+var styles = ["src/**/*.css"]
 function css() {
 	gulp.src(styles)
 		.pipe(minifyCSS())
 		.pipe(plugins.concat("e1.min.css"))
 		.pipe(gulp.dest("dist"))
 }
-var styles = ["src/**/*.css"]
 gulp.task("minifyCSS", css);
 
 var babelPlugins = [

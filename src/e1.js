@@ -1,12 +1,12 @@
-class E1{
-    constructor(){
-        this.bindings = {}
-        this.components = {}
-        this.models = {}
-        this.subscriptions = {}
-        this.ids = []
+class E1 {
+	constructor() {
+		this.bindings = {}
+		this.components = {}
+		this.models = {}
+		this.subscriptions = {}
+		this.ids = []
 
-        this.cleanHtml = this.cleanHtml
+		this.cleanHtml = this.cleanHtml
 		this.generateId = this.generateId
 		this.getModel = this.getModel
 		this.getThis = this.getThis
@@ -21,17 +21,17 @@ class E1{
 		this.observer = new window.MutationObserver(
 			(records) => {
 				var components = Object.keys(this.components)
-	
+
 				var initElement = (element, componentName) => {
 					if (element.nodeName && element.nodeName.toLowerCase() === componentName) {
 						this.components[componentName]._initElement(element)
 					}
 				}
-	
-				records.forEach( (record) => {
+
+				records.forEach((record) => {
 					if (record.addedNodes.length) {
 						for (var i = 0; i < record.addedNodes.length; i++) {
-							components.forEach((component, componentName)=>{
+							components.forEach((component, componentName) => {
 								initElement(record.addedNodes[i], componentName)
 							})
 						}
@@ -39,18 +39,18 @@ class E1{
 				})
 			}
 		)
-    }
+	}
 
-    cleanHtml(html){
-        return html ? html.toString()
-        .replace(/<script[^>]*?>.*?<\/script>/gi, "")
-        .replace(/<style[^>]*?>.*?<\/style>/gi, "")
-        .replace(/<![\s\S]*?--[ \t\n\r]*>/gi, "")
-        : ""
-    }
+	cleanHtml(html) {
+		return html ? html.toString()
+			.replace(/<script[^>]*?>.*?<\/script>/gi, "")
+			.replace(/<style[^>]*?>.*?<\/style>/gi, "")
+			.replace(/<![\s\S]*?--[ \t\n\r]*>/gi, "")
+			: ""
+	}
 
-    generateId(){
-        var generate = function() {
+	generateId() {
+		var generate = function () {
 			var text = ""
 			var possible = "abcdefghijklmnopqrstuvwxyz"
 
@@ -70,9 +70,9 @@ class E1{
 		this.ids.push(id)
 
 		return id
-    }
+	}
 
-    getModel(element, attribute, defaultValue) {
+	getModel(element, attribute, defaultValue) {
 		var path
 
 		if (!element && !attribute) {
@@ -132,7 +132,7 @@ class E1{
 		return result
 	}
 
-	registerComponent (name, service) {
+	registerComponent(name, service) {
 		this.components[name] = {
 			service: service,
 			_initElement: (el) => {
@@ -141,14 +141,14 @@ class E1{
 					this.components[name].registeredElements.push(el)
 					el.setAttribute("component-id", this.generateId())
 
-					if(!el.onUpdate){
+					if (!el.onUpdate) {
 						el.onUpdate = []
 					}
 
 					el.onUpdate.push(thisService.update.bind(thisService))
 
 					this.registerElement(el)
-					
+
 				}
 			},
 			registeredElements: [],
@@ -168,18 +168,18 @@ class E1{
 		}
 	}
 
-	registerAttribute (name, service) {
+	registerAttribute(name, service) {
 		this.components[name] = {
 			service: service,
 			_initElement: (el) => {
 				if (this.components[name].registeredElements.indexOf(el) === -1) {
 					var thisService = new this.components[name].service(el)
 					this.components[name].registeredElements.push(el)
-					
-					if(!el.onUpdate){
+
+					if (!el.onUpdate) {
 						el.onUpdate = []
 					}
-					
+
 					el.onUpdate.push(thisService.update.bind(thisService))
 					this.registerElement(el)
 				}
@@ -201,7 +201,7 @@ class E1{
 		}
 	}
 
-	registerElement (el) {
+	registerElement(el) {
 		if (!el || !el.attributes) { return }
 
 		var attributes = el.attributes
@@ -219,7 +219,7 @@ class E1{
 		}
 	}
 
-	scan (element) {
+	scan(element) {
 		for (var c in this.components) {
 			if (this.components[c]) {
 				this.components[c].scan(element)
@@ -310,20 +310,20 @@ class E1{
 		this.subscriptions[path].push(callback)
 	}
 
-	updateBindings (path, clone) {
+	updateBindings(path, clone) {
 		var elements = this.bindings[path]
 		var subscribes = this.subscriptions[path]
 
 		if (subscribes && subscribes.length) {
-			subscribes.forEach((element) =>{
+			subscribes.forEach((element) => {
 				element(clone)
 			});
 		}
 
 		if (elements && elements.length) {
-			elements.forEach( (element) => {
+			elements.forEach((element) => {
 				if (element.onUpdate) {
-					element.onUpdate.forEach((callback)=>{
+					element.onUpdate.forEach((callback) => {
 						callback()
 					})
 				}
@@ -337,7 +337,7 @@ class E1{
 				}
 			}
 		}
-    }
+	}
 }
 
 window.E1 = new E1()
