@@ -1,0 +1,47 @@
+html{
+    background: #1f2225;
+    color: #d4d6da;
+    font-size: 14px;
+    font-family: sans-serif;
+}
+
+body{
+    margin: 0px;
+    padding: 21px 42px;
+}
+
+h1{
+    border-bottom: 1px solid #272e35;
+    padding-bottom: 14px;
+}
+
+h3{
+    margin: 0px 0px 21px;
+}
+
+label{
+    display: block;
+    margin-bottom: 7px;
+}
+
+input, textarea{
+    background: #464a4e;
+    border: none;
+    font-family: sans-serif;
+    font-size: 14px;
+    padding: 4px;
+    color: #d4d6da;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+textarea{
+    min-height: 70px;
+}
+
+.box{
+    margin: 14px 0px;
+    padding: 21px;
+    box-sizing: border-box;
+    background: #17191b;
+}
