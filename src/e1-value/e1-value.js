@@ -3,17 +3,17 @@ class E1Value{
         this.el = el
         this.el["e1-value-onUpdate"] = this.update
 
-        this.value = E1.getModel(this.el, "e1-value")
+        this.value = window.E1.getModel(this.el, "e1-value")
         this.valueType = this.typeOfValue(this.value)
 
-        this.el.setAttribute("value", E1.getModel(this.el, "e1-value"))
+        this.el.setAttribute("value", window.E1.getModel(this.el, "e1-value"))
 
         if(this.el.nodeName.toLowerCase() === "textarea"){
-            this.el.innerHTML = E1.getModel(this.el, "e1-value")
+            this.el.innerHTML = window.E1.getModel(this.el, "e1-value")
         }
 
         this.el.addEventListener("input", ()=>{
-            E1.setModel(this.el, "e1-value", this.el.value)
+            window.E1.setModel(this.el, "e1-value", this.el.value)
         })
     }
 
@@ -61,10 +61,10 @@ class E1Value{
 	}
 
     update(){
-        this.value = E1.getModel(this.el, "e1-value")
+        this.value = window.E1.getModel(this.el, "e1-value")
         this.valueType = this.typeOfValue(this.value)
-        this.el.setAttribute("value", E1.getModel(this.el, "e1-value"))
+        this.el.setAttribute("value", window.E1.getModel(this.el, "e1-value"))
     }
 }
 
-E1.registerAttribute("e1-value", E1Value)
+window.E1.registerAttribute("e1-value", E1Value)

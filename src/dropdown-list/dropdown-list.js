@@ -2,7 +2,7 @@ class DropdownList{
     constructor(el){
         this.el = el
         this.update = this.update
-        this.label = E1.getModel(this.el, "label")
+        this.label = window.E1.getModel(this.el, "label")
         this.list = this.getList()
 
         var container = window.document.createElement("div")
@@ -60,10 +60,10 @@ class DropdownList{
     }
 
     getLabel(){
-        var labelHtml = E1.getModel(this.el, "label")
+        var labelHtml = window.E1.getModel(this.el, "label")
 		var labelElement = window.document.createElement("div")
 		labelElement.className = "dropdown-list-label"
-        labelElement.innerHTML = E1.cleanHtml(labelHtml)
+        labelElement.innerHTML = window.E1.cleanHtml(labelHtml)
         
         if(this.list && this.list.length){
             labelElement.classList.add("has-options")
@@ -80,7 +80,7 @@ class DropdownList{
 			this.list.forEach((option, key) =>{
 				var optionWrapper = window.document.createElement("div")
 				optionWrapper.className = "dropdown-list-option"
-				optionWrapper.innerHTML = E1.cleanHtml(option)
+				optionWrapper.innerHTML = window.E1.cleanHtml(option)
 				optionWrapper.setAttribute("option-key", key)
 
 				var clickThrottle = false
@@ -111,7 +111,7 @@ class DropdownList{
     }
 
     getList(){
-        var list = E1.getModel(this.el, "list")
+        var list = window.E1.getModel(this.el, "list")
 
         try {
 			list = JSON.parse(list)
@@ -126,7 +126,7 @@ class DropdownList{
 
     update(){
         var container = this.el.querySelector(".dropdown-container")
-        var label = E1.getModel(this.el, "label")
+        var label = window.E1.getModel(this.el, "label")
         var list = this.getList()
 
         if(JSON.stringify(list) !== JSON.stringify(this.list)){
@@ -141,4 +141,4 @@ class DropdownList{
     }
 }
 
-E1.registerComponent("dropdown-list", DropdownList)
+window.E1.registerComponent("dropdown-list", DropdownList)
