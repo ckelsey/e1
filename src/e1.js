@@ -43,9 +43,9 @@ class E1{
 
     cleanHtml(html){
         return html ? html.toString()
-        .replace(/<script[^>]*?>.*?<\/script>/gi, '')
-        .replace(/<style[^>]*?>.*?<\/style>/gi, '')
-        .replace(/<![\s\S]*?--[ \t\n\r]*>/gi, '')
+        .replace(/<script[^>]*?>.*?<\/script>/gi, "")
+        .replace(/<style[^>]*?>.*?<\/style>/gi, "")
+        .replace(/<![\s\S]*?--[ \t\n\r]*>/gi, "")
         : ""
     }
 
@@ -163,7 +163,7 @@ class E1{
 			}
 		}
 
-		if (window.document.readyState === 'complete') {
+		if (window.document.readyState === "complete") {
 			this.components[name].scan(window.document.body)
 		}
 	}
@@ -196,7 +196,7 @@ class E1{
 			}
 		}
 
-		if (window.document.readyState === 'complete') {
+		if (window.document.readyState === "complete") {
 			this.components[name].scan(window.document.body)
 		}
 	}
@@ -343,7 +343,7 @@ class E1{
 window.E1 = new E1()
 module.export = window.E1
 
-if (window.document.readyState === 'complete') {
+if (window.document.readyState === "complete") {
 	window.E1.observer.observe(window.document.body, {
 		attributes: true,
 		attributeOldValue: true,

@@ -23,38 +23,38 @@ class E1Value{
 		} catch (e) { }
 
 		if (val === undefined) {
-			return 'undefined';
+			return "undefined";
 		}
 
 		if (val === null) {
-			return 'null';
+			return "null";
 		}
 
 		if (val === true || val === false) {
-			return 'boolean';
+			return "boolean";
 		}
 
-		if (typeof val === 'number') {
-			return 'number';
+		if (typeof val === "number") {
+			return "number";
 		}
 
-		if (Object.prototype.toString.call(val) === '[object Date]' || (val.indexOf && val.indexOf(':') > -1 && new Date(val) !== "Invalid Date" && !isNaN(new Date(val)))) {
-			return 'date';
+		if (Object.prototype.toString.call(val) === "[object Date]" || (val.indexOf && val.indexOf(":") > -1 && new Date(val) !== "Invalid Date" && !isNaN(new Date(val)))) {
+			return "date";
 		}
 
-		if (typeof val === 'string') {
-			return 'string';
+		if (typeof val === "string") {
+			return "string";
 		}
 
 		var string = {}.toString.apply(val);
-		if (string === '[object Array]') {
-			return 'array';
+		if (string === "[object Array]") {
+			return "array";
 		}
-		if (string === '[object Object]') {
-			return 'object';
+		if (string === "[object Object]") {
+			return "object";
 		}
-		if (string === '[object Function]') {
-			return 'function';
+		if (string === "[object Function]") {
+			return "function";
 		}
 
 		return

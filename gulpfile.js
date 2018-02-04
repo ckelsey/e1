@@ -10,7 +10,6 @@ var assign = require("lodash.assign");
 var stringify = require("stringify");
 var plugins = require("gulp-load-plugins")();
 var minifyCSS = require("gulp-minify-css");
-var uglify = require("gulp-uglify");
 var fs = require("fs");
 
 gulp.task("moveToBuild", moveToBuild)
