@@ -1,0 +1,23 @@
+<h2>e1-show</h2>
+<p>Shows or hides the element based on the truthiness of the supplied binding. Unlike e1-if, e1-show does this via css. Note
+    on values which are initially falsey, to prevent a flash on first page load, add style="display:none;" to the element</p>
+<p>&nbsp;</p>
+<h2>Markup</h2>
+<pre><code></code></pre>
+<p>&nbsp;</p>
+<h2>Demo</h2>
+<p>Show if has a truthy value:
+<span demo-el>
+<span e1-show="@demoService.trueFalse" style="display: none;">Outer value is true
+    <span e1-show="@demoService.trueFalse2" style="display: none;">, inner value is true</span>
+</span>
+</span>
+</p>
+<div>
+    <input type="checkbox" e1-value="@demoService.trueFalse" />
+    <span>Show outer text</span>
+</div>
+<div>
+    <input type="checkbox" e1-value="@demoService.trueFalse2" />
+    <span>Show nested text</span>
+</div>

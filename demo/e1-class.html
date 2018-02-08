@@ -1,0 +1,50 @@
+<h2>e1-class</h2>
+<p>Evaluates the supplied value and adds/removes classes to the element. There are 2 ways to go about it:</p>
+<p>
+    <ul>
+        <li>You can supply a single or comma separated string of bindings that will add their values as classes.</li>
+        <li>You can supply a single or comma separated string of bindings, each with a conditional binding and a value binding
+            separated by a colon. If the conditional binding has a value, the value binding will be added as a class.</li>
+    </ul>
+</p>
+<p>&nbsp;</p>
+
+<h2>Markup</h2>
+<pre><code></code></pre>
+<p>&nbsp;</p>
+
+<h2>Demos</h2>
+
+<p e1-class="@demoService.e1ClassString">This has a simple class:
+    <span e1-content="@demoService.e1ClassString"></span>
+</p>
+
+<input type="text" e1-value="@demoService.e1ClassString" />
+
+<p>&nbsp;</p>
+
+<p e1-class="@demoService.e1ClassString, @demoService.e1ClassString2">This has multiple classes, separated by a comma</p>
+
+<input type="text" e1-value="@demoService.e1ClassString" />
+<input type="text" e1-value="@demoService.e1ClassString2" style="margin-top: 7px;" />
+
+<p>&nbsp;</p>
+
+<p demo-el><span e1-class="@demoService.trueFalse: @demoService.e1ClassString, @demoService.trueFalse2: @demoService.e1ClassString2">This has conditional classes, separated by ":", i.e condition:class. Class can be bound or a string literal</span></p>
+
+<div>
+    <input type="checkbox" e1-value="@demoService.trueFalse" />
+    <span>Blue</span>
+</div>
+<div>
+    <input type="checkbox" e1-value="@demoService.trueFalse2" />
+    <span>Bold</span>
+</div>
+
+<p>&nbsp;</p>
+
+<style e1-content="@demoService.styles"></style>
+<div>
+    <label>Demo classes</label>
+    <textarea e1-value="@demoService.styles"></textarea>
+</div>

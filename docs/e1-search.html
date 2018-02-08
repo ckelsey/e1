@@ -1,0 +1,60 @@
+<h2>e1-search</h2>
+<p></p>
+<p>&nbsp;</p>
+
+<h2>Markup</h2>
+<pre><code></code></pre>
+<p>&nbsp;</p>
+
+<h2>Demo</h2>
+<p demo-el>
+<e1-search model="@demoService.repeatObject" results="@demoService.searchResults" value="@demoService.searchValue" paths="@demoService.searchPaths" placeholder="@demoService.searchLabel"></e1-search>
+</p>
+<p>&nbsp;</p>
+
+<p>Results:</p>
+<div e1-repeat="@demoService.searchResults" delimiter="$key">
+    <p>
+        <span e1-content="@demoService.searchResults.$key.name"></span> has
+        <span e1-content="@demoService.searchResults.$key.count"></span>
+        <span e1-content="@demoService.searchResults.$key.fruit"></span>
+    </p>
+</div>
+
+<div class="box">
+    <h3>Attributes</h3>
+    <div>
+        <label>placeholder
+            <small>- what the toggle text says. Can be HTML.</small>
+        </label>
+        <input type="text" e1-value="@demoService.searchLabel" />
+    </div>
+    <p>&nbsp;</p>
+    <div>
+        <label>value
+            <small>- what the toggle text says. Can be HTML.</small>
+        </label>
+        <input type="text" e1-value="@demoService.searchValue" />
+    </div>
+    <p>&nbsp;</p>
+    <div style="margin-top: 21px;">
+        <label>model
+            <small>- can be an array or comma separated string. If empty, the label will not display an arrow.</small>
+        </label>
+        <textarea e1-value="@demoService.repeatObject"></textarea>
+    </div>
+    <p>&nbsp;</p>
+    <div style="margin-top: 21px;">
+        <label>results
+            <small>- can be an array or comma separated string. If empty, the label will not display an arrow.</small>
+        </label>
+        <textarea e1-value="@demoService.searchResults"></textarea>
+    </div>
+    <p>&nbsp;</p>
+    <div style="margin-top: 21px;">
+        <label>paths
+            <small>- can be an array or comma separated string. If empty, the label will not display an arrow.</small>
+        </label>
+        <textarea e1-value="@demoService.searchPaths"></textarea>
+    </div>
+</div>

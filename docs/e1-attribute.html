@@ -1,0 +1,16 @@
+<h2>e1-attribute</h2>
+<p>Adds a bound attribute and value. The expression pattern is [model binding]:[attribute name], i.e. @demoService.link:href</p>
+<p>&nbsp;</p>
+<h2>Markup</h2>
+<pre><code></code></pre>
+<p>&nbsp;</p>
+<h2>Demo</h2>
+<p demo-el>
+    <a target="_blank" e1-attribute="@demoService.link:href, @demoService.alertMessage:onclick">Here is a link with bound href and onclick attributes</a>
+</p>
+<p>
+    <input type="text" e1-value="@demoService.link" />
+</p>
+<p>
+    <input type="text" e1-value="@demoService.alertMessage" />
+</p>

@@ -1,0 +1,30 @@
+<h2>e1-repeat</h2>
+<p>Iterates through an array and renders content for each item. The html inside the element is used as the template. Note that
+    the template markup must only have one root element.</p>
+<p>The delimiter attribute is required and is used as a placeholder for the index of the array item.</p>
+<p>&nbsp;</p>
+
+<h2>Markup</h2>
+<pre><code></code></pre>
+<p>&nbsp;</p>
+
+<h2>Demo</h2>
+<div demo-el>
+<div e1-repeat="@demoService.repeatObject" delimiter="$key">
+    <p>
+        <span e1-content="@demoService.repeatObject.$key.name"></span> likes to eat
+        <span e1-content="@demoService.repeatObject.$key.fruit"></span>
+    </p>
+</div>
+</div>
+<div class="box">
+    <h3>Attributes</h3>
+    <div>
+        <label>e1-repeat</label>
+        <textarea e1-value="@demoService.repeatObject"></textarea>
+    </div>
+    <div style="margin-top: 21px;">
+        <label>delimiter</label>
+        <input type="text" e1-value="$key" />
+    </div>
+</div>

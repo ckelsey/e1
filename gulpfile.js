@@ -20,7 +20,11 @@ var buildFiles = [
 	"demo-styles.css",
     "dist/e1.min.css",
 	"dist/e1.min.js",
-	"dist/e1.min.js.map"
+	"dist/e1.min.js.map",
+	"node_modules/prismjs/themes/prism-twilight.css",
+	"node_modules/prismjs/themes/prism.css",
+	"node_modules/prismjs/prism.js",
+	"demo/**.*"
 ]
 
 function moveToBuild() {

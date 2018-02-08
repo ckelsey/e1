@@ -21,33 +21,91 @@ class E1 {
 
 		this.observer = new window.MutationObserver(
 			(records) => {
+
 				var components = Object.keys(this.components)
 
 				var initElement = (element, componentName) => {
 					if (element.nodeName && element.nodeName.toLowerCase() === componentName) {
 						this.components[componentName]._initElement(element)
 					}
+
+					if (element.hasAttribute(componentName)) {
+						this.components[componentName]._initElement(element)
+					}
+
+					var elements = element.querySelectorAll(componentName)
+
+					if(!elements.length){
+						elements = element.querySelectorAll("[" + componentName + "]")
+					}
+
+					
+					if(elements.length){
+						for (var i = 0; i < elements.length; i++) {
+							this.components[componentName]._initElement(elements[i])
+						}
+					}
 				}
 
 				records.forEach((record) => {
 					if (record.addedNodes.length) {
 						for (var i = 0; i < record.addedNodes.length; i++) {
-							components.forEach((component, componentName) => {
-								initElement(record.addedNodes[i], componentName)
-							})
+							if(record.addedNodes[i].nodeType !== 3){
+								components.forEach((componentName) => {
+									initElement(record.addedNodes[i], componentName)
+								})
+							}
 						}
 					}
+
+					// if(record.removedNodes.length){
+					// 	console.log(record.removedNodes)
+					// 	var bindingKeys = Object.keys(this.bindings)
+
+					// 	for (var i = 0; i < record.removedNodes.length; i++) {
+					// 		if(record.removedNodes[i].nodeType !== 3){
+					// 			bindingKeys.forEach((bindingKey) => {
+					// 				this.bindings[bindingKey].forEach((el, index) => {
+					// 					if(el.hasAttribute("component-id") && record.removedNodes[i].hasAttribute("component-id") && el.getAttribute("component-id") === record.removedNodes[i].getAttribute("component-id")){
+					// 						// console.log("removing ", el)
+					// 						// this.bindings[bindingKey].splice(index, 1)
+					// 					}
+					// 				})
+					// 			})
+					// 		}
+					// 	}
+					// }
 				})
 			}
 		)
 	}
 
-	cleanHtml(html) {
-		return html ? html.toString()
+	cleanHtml(html, contextNode) {
+		html = html ? html.toString()
 			.replace(/<script[^>]*?>.*?<\/script>/gi, "")
 			.replace(/<style[^>]*?>.*?<\/style>/gi, "")
 			.replace(/<![\s\S]*?--[ \t\n\r]*>/gi, "")
 			: ""
+
+		var match = /<\s*\w.*?>/g.exec(html)
+		var element = document.createElement('div')
+
+		if (match !== null) {
+			if(contextNode && contextNode.parentNode){
+				var range = document.createRange()
+				range.selectNode(contextNode)
+				element = range.createContextualFragment(html)
+			}else{
+				element = document.createRange().createContextualFragment(html)
+			}
+
+			element = element.lastChild
+		} else {
+			element.innerHTML = html
+			element = element.lastChild
+		}
+
+		return element
 	}
 
 	generateId() {
@@ -107,9 +165,9 @@ class E1 {
 
 		var service = path.shift()
 
-		if(this.services[service]){
+		if (this.services[service]) {
 			service = this.services[service]
-		}else{
+		} else {
 			path.unshift(service)
 			service = window
 		}
@@ -154,6 +212,7 @@ class E1 {
 					var thisService = new this.components[name].service(el)
 					this.components[name].registeredElements.push(el)
 					el.setAttribute("component-id", this.generateId())
+					el["component-id"] = el.getAttribute("component-id")
 
 					if (!el.onUpdate) {
 						el.onUpdate = []
@@ -190,6 +249,11 @@ class E1 {
 					var thisService = new this.components[name].service(el)
 					this.components[name].registeredElements.push(el)
 
+					if(!el.hasAttribute("component-id")){
+						el.setAttribute("component-id", this.generateId())
+						el["component-id"] = el.getAttribute("component-id")
+					}
+
 					if (!el.onUpdate) {
 						el.onUpdate = []
 					}
@@ -224,22 +288,22 @@ class E1 {
 			var attributeValue = attributes[i].value
 
 			if (attributeValue.substring(0, 1) === "@") {
-				var bindings = attributeValue.split(",").map(b=>{return b.trim()})
+				var bindings = attributeValue.split(",").map(b => { return b.trim() })
 
-				bindings.forEach(binding=>{
+				bindings.forEach(binding => {
 					var conditionalBinding = binding.split(":")[0]
-					
+
 					if (!this.bindings[conditionalBinding]) {
 						this.bindings[conditionalBinding] = []
 					}
-	
+
 					this.bindings[conditionalBinding].push(el)
 				})
 			}
 		}
 	}
 
-	registerService(name, service){
+	registerService(name, service) {
 		this.services[name] = service
 		this.updateBindings("@" + name, service)
 	}
@@ -278,9 +342,9 @@ class E1 {
 
 		var service = path.shift()
 
-		if(this.services[service]){
+		if (this.services[service]) {
 			service = this.services[service]
-		}else{
+		} else {
 			path.unshift(service)
 			service = window
 		}
@@ -356,17 +420,23 @@ class E1 {
 		if (subscribes && subscribes.length) {
 			subscribes.forEach((element) => {
 				element(clone)
-			});
+			})
 		}
 
 		if (elements && elements.length) {
 			elements.forEach((element) => {
-				if (element.onUpdate) {
+				var isShown = window.document.body.contains(element)
+				
+				if(element.hasAttribute("e1-if") && this.getModel(element, "e1-if")){
+					isShown = true
+				}
+
+				if (isShown && element.onUpdate) {
 					element.onUpdate.forEach((callback) => {
 						callback()
 					})
 				}
-			});
+			})
 		}
 
 		if (clone && typeof clone === "object") {
@@ -380,7 +450,7 @@ class E1 {
 }
 
 window.E1 = new E1()
-module.export = window.E1
+module.exports = window.E1
 
 if (window.document.readyState === "complete") {
 	window.E1.observer.observe(window.document.body, {
@@ -403,5 +473,5 @@ if (window.document.readyState === "complete") {
 		})
 
 		window.E1.scan(window.document.body)
-	});
+	})
 }

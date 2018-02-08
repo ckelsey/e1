@@ -1,0 +1,26 @@
+<h2>e1-dropdown</h2>
+<p>This element renders a dropdown list</p>
+<p>&nbsp;</p>
+<h2>Markup</h2>
+<pre><code></code></pre>
+<p>&nbsp;</p>
+<h2>Demo</h2>
+<div demo-el>
+<e1-dropdown list="@demoService.dropdown.list" label="@demoService.dropdown.label"></e1-dropdown>
+</div>
+<div class="box">
+    <h3>Attributes</h3>
+    <div>
+        <label>label
+            <small>- what the toggle text says. Can be HTML.</small>
+        </label>
+        <input type="text" e1-value="@demoService.dropdown.label" />
+    </div>
+    <p>&nbsp;</p>
+    <div style="margin-top: 21px;">
+        <label>list
+            <small>- can be an array or comma separated string. If empty, the label will not display an arrow.</small>
+        </label>
+        <textarea e1-value="@demoService.dropdown.list"></textarea>
+    </div>
+</div>

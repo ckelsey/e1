@@ -10,29 +10,72 @@ body{
     padding: 21px 42px;
 }
 
+body *{
+    box-sizing: border-box;
+}
+
 h1{
     border-bottom: 1px solid #272e35;
-    padding-bottom: 14px;
+    padding-bottom: 28px;
+    margin: 21px 0px 21px;
+}
+
+h1 small{
+    font-size: 14px;
+    font-weight: 100;
+    vertical-align: middle;
 }
 
 h3{
     margin: 0px 0px 21px;
 }
 
+p{
+    margin: 14px 0px;
+    line-height: 21px;
+}
+
+ul{
+    list-style: none;
+}
+
+li{
+    line-height: 21px;
+    margin-bottom: 14px;
+}
+
+li::before {
+    content: "• ";
+    color: #658eb3;
+    margin: 0px 5px 0px -14px;
+  }
+
 label{
     display: block;
-    margin-bottom: 7px;
+    border-bottom: 1px solid #272e35;
+    padding-bottom: 7px;
+}
+
+label small{
+    opacity: .68;
 }
 
 input, textarea{
-    background: #464a4e;
     border: none;
     font-family: sans-serif;
     font-size: 14px;
-    padding: 7px;
+    padding: 10px;
     color: #d4d6da;
     width: 100%;
     box-sizing: border-box;
+    box-shadow: 0px 0px 0px 1px rgba(101, 142, 179, 0.38);
+    background: rgba(66, 90, 111, 0.18);
+    transition: .2s;
+}
+
+input:focus, textarea:focus{
+    box-shadow: 0px 0px 0px 1px rgba(101, 142, 179, 0.62);
+    background: rgba(66, 90, 111, 0.38);
 }
 
 textarea{
@@ -40,11 +83,54 @@ textarea{
 }
 
 input, textarea, button{
+    line-height: 21px;
     outline: none !important;
 }
 
 input[type="checkbox"]{
-    width: auto;
+    width: 21px;
+    position: relative;
+    height: 21px;
+    background: transparent;
+    border: none;
+    appearance: none;
+    -ms-appearance: none;
+    -o-appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    box-shadow: none;
+    padding: 0px;
+    vertical-align: middle;
+}
+
+input[type="checkbox"]:before{
+    content: "";
+    position: absolute;
+    width: 21px;
+    height: 21px;
+    box-shadow: 0px 0px 0px 1px rgba(101, 142, 179, 0.38);
+    background: rgba(66, 90, 111, 0.18);
+    opacity: 1;
+    cursor: pointer;
+    pointer-events: none;
+}
+
+input[type="checkbox"]:hover::before{
+    background: rgba(66, 90, 111, 0.38);
+}
+
+input[type="checkbox"]:checked::before{
+    background: rgba(66, 90, 111, 1);
+}
+
+body pre {
+    border-radius: 0px;
+    border: none;
+    box-shadow: none;
+    margin: 0px;
+    overflow: auto;
+    padding: 0px;
+    background: #171a1d;
 }
 
 code{
@@ -53,17 +139,74 @@ code{
     box-sizing: border-box;
     width: 100%;
     display: block;
-    font-size: 12px;
     overflow: auto;
+    line-height: 14px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.24);
+}
+
+a{
+    color: inherit;
 }
 
 .box{
-    margin: 14px 0px;
+    margin: 21px 0px;
     padding: 21px;
     box-sizing: border-box;
     background: #17191b;
 }
 
 .group{
-    margin-bottom: 70px;
+    margin-bottom: 14px;
+}
+
+h2[e1-accordian-toggle]{
+    display: block;
+    padding: 14px 14px 14px 21px;
+}
+
+#container{
+    display: flex;
+}
+
+#sidebar{
+    width: 200px;
+}
+
+#sidebar [e1-accordian-toggle-group]{
+    width: 100%;
+    background: transparent;
+}
+
+.sidebar-content{
+    padding-left: 14px;
+}
+
+#main{
+    width: calc(100% - 200px);
+    padding: 0px 0px 0px 42px;
+}
+
+#sidebar [e1-accordian-toggle]{
+    color: #658eb3;
+}
+
+#sidebar [e1-accordian-toggle].active-accordian{
+    color: #fff;
+}
+
+.active-accordian::before{
+    border-left-color: #fff;
+}
+
+.token.attr-value{
+    color: #07a;
+}
+
+.token.attr-name{
+    color: #c7a267;
+}
+
+.token.tag{
+    color: hsl(0, 0%, 56%);
 }

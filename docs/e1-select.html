@@ -1,0 +1,43 @@
+<h2>e1-select</h2>
+<p></p>
+<p>&nbsp;</p>
+
+<h2>Markup</h2>
+<pre><code></code></pre>
+<p>&nbsp;</p>
+
+<h2>Demo</h2>
+<p demo-el>
+<e1-select label="@demoService.select.label" options="@demoService.select.options" value="@demoService.select.value" onselected="@demoService.select.onselect"></e1-select>
+</p>
+
+<div class="box">
+    <h3>Attributes</h3>
+    <div>
+        <label>label
+            <small>- what the toggle text says. Can be HTML.</small>
+        </label>
+        <input type="text" e1-value="@demoService.select.label" />
+    </div>
+    <p>&nbsp;</p>
+    <div style="margin-top: 21px;">
+        <label>options
+            <small>- can be an array or comma separated string. If empty, the label will not display an arrow.</small>
+        </label>
+        <textarea e1-value="@demoService.select.options"></textarea>
+    </div>
+    <p>&nbsp;</p>
+    <div style="margin-top: 21px;">
+        <label>value
+            <small>- can be an array or comma separated string. If empty, the label will not display an arrow.</small>
+        </label>
+        <textarea e1-value="@demoService.select.value"></textarea>
+    </div>
+    <p>&nbsp;</p>
+    <div style="margin-top: 21px;">
+        <label>onselected
+            <small>- can be an array or comma separated string. If empty, the label will not display an arrow.</small>
+        </label>
+        <textarea e1-value="@demoService.select.onselect"></textarea>
+    </div>
+</div>

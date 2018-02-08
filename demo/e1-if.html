@@ -1,0 +1,20 @@
+<h2>e1-if</h2>
+<p>Recreates or removes the element based on the truthiness of the supplied binding.</p>
+<p>&nbsp;</p>
+<h2>Markup</h2>
+<pre><code></code></pre>
+<p>&nbsp;</p>
+<h2>Demo</h2>
+<p>Will render text if has a truthy value:
+    <span demo-el>
+        <span e1-if="@demoService.trueFalse3" e1-content="@demoService.ifContent"></span>
+    </span>
+</p>
+<div>
+    <input type="checkbox" e1-value="@demoService.trueFalse3" />
+    <span>Render outer text</span>
+</div>
+<div>
+    <input type="checkbox" e1-value="@demoService.trueFalse4" />
+    <span>Render nested text</span>
+</div>

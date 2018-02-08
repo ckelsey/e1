@@ -1,8 +1,16 @@
 require("./e1")
-require("./dropdown-list")
-require("./e1-value")
-require("./e1-content")
-require("./e1-class")
-require("./e1-show")
-require("./e1-if")
-require("./e1-test")
+
+require("./attribute")
+require("./if")
+require("./repeat")
+require("./value")
+require("./content")
+require("./class")
+require("./show")
+
+require("./dropdown")
+require("./accordian-toggle")
+require("./search")
+require("./select")
+
+// require("./e1-test")
