@@ -1,0 +1,54 @@
+<h2>e1-proximity</h2>
+<p></p>
+<p>&nbsp;</p>
+<h2>Markup</h2>
+<pre><code></code></pre>
+<p>&nbsp;</p>
+<h2>Demo</h2>
+
+<p>Scroll into view.
+    <b>Is visible:
+        <span e1-content="@demoService.proximity.0.isVisible"></span>
+    </b>
+</p>
+<div style="width:100%; height: 100px; overflow: scroll;">
+    <div style="width:100%; height: 300px; display: flex; align-items: flex-end;background: rgba(0, 0, 0, 0.29);">
+        <p style="padding:21px;background:rgba(255,255,255,0.1)" 
+        e1-proximity="top" 
+        e1-proximity-in="@demoService.proximity.0.inProximity"
+        e1-proximity-out="@demoService.proximity.0.outProximity"
+        >Proximity</p>
+    </div>
+</div>
+<p>&nbsp;</p>
+<p>Scroll into view, horizontal.
+    <b>Is visible:
+        <span e1-content="@demoService.proximity.1.isVisible"></span>
+    </b>
+</p>
+<div style="width:100px; height: 100px; overflow: scroll;">
+    <div style="width:300px; height: 100px; display: flex; justify-content:flex-end;align-items: flex-end;background: rgba(0, 0, 0, 0.29);">
+        <p style="padding:21px;background:rgba(255,255,255,0.1)" 
+        e1-proximity="left" 
+        e1-proximity-target-dimension="right" 
+        e1-proximity-in="@demoService.proximity.1.inProximity"
+        e1-proximity-out="@demoService.proximity.1.outProximity"
+        >Proximity</p>
+    </div>
+</div>
+<p>&nbsp;</p>
+<p>Element A is less than 50px from Element B(scroll):
+    <span e1-content="@demoService.proximity.2.isClose"></span>
+</p>
+<p id="element-b-proximity" style="padding:21px;background:rgba(255,255,255,0.1)">Element A</p>
+<div style="width:100%; height: 100px; overflow: scroll;">
+    <div style="width:100%; height: 300px; display: flex; align-items: flex-end;background: rgba(0, 0, 0, 0.29);">
+        <p style="padding:21px;background:rgba(255,255,255,0.1)" 
+        e1-proximity="top" 
+        e1-proximity-threshold="50" 
+        e1-proximity-target="#element-b-proximity"
+        e1-proximity-in="@demoService.proximity.2.inProximity"
+        e1-proximity-out="@demoService.proximity.2.outProximity"
+        >Element B</p>
+    </div>
+</div>

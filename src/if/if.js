@@ -5,30 +5,35 @@ class E1If {
         this.el = el
         this.el["e1-if-onUpdate"] = this.update
         this.parentNode = this.el.parentNode
-        this.index = Array.prototype.indexOf.call(this.el.parentNode.childNodes, this.el)
+        this.index = Array.prototype.indexOf.call(this.el.parentNode.children, this.el)
+        this.comment = window.document.createComment(this.el.getAttribute("component-id"))
+        this.parentNode.insertBefore(this.comment, this.el);
 
-        var model = E1.getModel(this.el, "e1-if")
-
-        if(!model){
+        if(!this.check()){
             this.parentNode.removeChild(this.el)
         }
         
-        this.throttle
+        this.throttle = null
+    }
+
+    check(){
+        var val = this.el.getAttribute("e1-if")
+        var notBoundOrEmpty = val && val[0] !== "@" && val !== "null" && val !== "undefined" && val !== "false"
+        return E1.isTruthy(this.el.getAttribute("e1-if")) || notBoundOrEmpty
     }
 
     update() {
         clearTimeout(this.throttle)
 
-        this.throttle = setTimeout(()=>{
+        this.throttle = setTimeout(()=>{  
+            var check = this.check()
 
-            var model = E1.getModel(this.el, "e1-if")
-    
-            if(model){
-                this.parentNode.insertBefore(this.el, this.parentNode.children[this.index]);
-            }else if(this.parentNode.contains(this.el)){
+            if(check && !this.el.parentNode){
+                this.parentNode.insertBefore(this.el, this.comment);
+            }else if(!check && this.parentNode.contains(this.el)){
                 this.parentNode.removeChild(this.el)
             }
-        }, 100)
+        }, 10)
     }
 }
 

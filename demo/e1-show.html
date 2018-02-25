@@ -6,7 +6,7 @@
 <pre><code></code></pre>
 <p>&nbsp;</p>
 <h2>Demo</h2>
-<p>Show if has a truthy value:
+<!-- <p>Show if has a truthy value:
 <span demo-el>
 <span e1-show="@demoService.trueFalse" style="display: none;">Outer value is true
     <span e1-show="@demoService.trueFalse2" style="display: none;">, inner value is true</span>
@@ -20,4 +20,17 @@
 <div>
     <input type="checkbox" e1-value="@demoService.trueFalse2" />
     <span>Show nested text</span>
+</div>
+<p>&nbsp;</p> -->
+<p>Only show if both are true:
+<span e1-show="@demoService.trueFalse && @demoService.trueFalse2" style="display: none;">both are true</span>
+</span>
+</p>
+<div>
+    <input type="checkbox" e1-value="@demoService.trueFalse" />
+    <span>Value 1</span>
+</div>
+<div>
+    <input type="checkbox" e1-value="@demoService.trueFalse2" />
+    <span>Value 2</span>
 </div>

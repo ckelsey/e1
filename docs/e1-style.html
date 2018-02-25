@@ -1,0 +1,30 @@
+<h2>e1-style</h2>
+<p></p>
+<p>&nbsp;</p>
+<h2>Markup</h2>
+<pre><code></code></pre>
+<p>&nbsp;</p>
+<h2>Demo</h2>
+<p demo-el>
+    <span e1-style="@demoService.color:color">This text has a color rule attached to it</span>
+</p>
+<p>
+    <input e1-value="@demoService.color" />
+</p>
+<p>&nbsp;</p>
+<p>
+    <span e1-style="@demoService.color2:color && @demoService.fontWeight:font-weight">This text has a color rule and a font-weight rule attached to it</span>
+</p>
+<p>
+    <input e1-value="@demoService.color2" />
+    <input e1-value="@demoService.fontWeight" value="bold" />
+</p>
+
+<p>&nbsp;</p>
+<p>
+    <span e1-style="@demoService.styleString && @demoService.styleString2">This text has a color rule and a font-weight rule attached to it via models</span>
+</p>
+<p>
+    <input e1-value="@demoService.styleString" />
+    <input e1-value="@demoService.styleString2" value="bold" />
+</p>

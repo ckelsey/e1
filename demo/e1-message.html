@@ -5,3 +5,45 @@
 <pre><code></code></pre>
 <p>&nbsp;</p>
 <h2>Demo</h2>
+<p demo-el>
+    <e1-message message="@demoService.message.message"  active="@demoService.message.active"  icon="@demoService.message.icon" type="@demoService.message.type"  buttons="@demoService.message.buttons"></e1-message>
+</p>
+<button onclick="E1.setModel(null, '@demoService.message.active', true)">Open message</button>
+<p>&nbsp;</p>
+<div class="box">
+    <h3>Attributes</h3>
+    <div>
+        <label>message
+            <small> - html string</small>
+        </label>
+        <input type="text" e1-value="@demoService.message.message">
+    </div>
+    <p>&nbsp;</p>
+    <div>
+        <label>icon
+            <small> - html string</small>
+        </label>
+        <input type="text" e1-value="@demoService.message.icon">
+    </div>
+    <p>&nbsp;</p>
+    <div>
+        <label>type
+            <small> - string</small>
+        </label>
+        <input type="text" e1-value="@demoService.message.type">
+    </div>
+    <p>&nbsp;</p>
+    <div>
+        <label>buttons
+            <small> - object</small>
+        </label>
+        <textarea e1-value="@demoService.message.buttons"></textarea>
+    </div>
+    <p>&nbsp;</p>
+    <div>
+        <label>active
+            <small> - boolean</small>
+        </label>
+        <input type="checkbox" e1-value="@demoService.message.active">
+    </div>
+</div>

@@ -10,12 +10,13 @@ class E1Class {
 
     renderClasses() {
         var classString = this.el.getAttribute("e1-class")
-        var classes = classString.split(",").map(c => { return c.trim() })
+        var classes = classString.split("&&").map(c => { return c.trim() })
         var classesQueue = []
 
         classes.forEach(clss => {
-            var conditional = clss.split(":").map(c => { return c.trim() })
+            var conditional = clss.split("?").map(c => { return c.trim() })
 
+            
             if (conditional.length > 1) {
                 var cond = E1.getModel(null, conditional[0])
                 
@@ -33,10 +34,10 @@ class E1Class {
                     }
                 }
             } else {
-                var clss = E1.getModel(null, conditional[0])
+                var _clss = E1.getModel(null, conditional[0])
 
-                if (clss) {
-                    classesQueue.push(clss)
+                if (_clss) {
+                    classesQueue.push(_clss)
                 }
             }
         });

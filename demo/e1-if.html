@@ -18,3 +18,50 @@
     <input type="checkbox" e1-value="@demoService.trueFalse4" />
     <span>Render nested text</span>
 </div>
+
+<p>Will render text if both has a truthy value:
+    <span>
+        <span e1-if="@demoService.trueFalse5 && @demoService.trueFalse6">Both have a truthy value</span>
+    </span>
+</p>
+<div>
+    <input type="checkbox" e1-value="@demoService.trueFalse5" />
+    <span>Value 1: <span e1-content="@demoService.trueFalse5"></span></span>
+</div>
+<div>
+    <input type="checkbox" e1-value="@demoService.trueFalse6" />
+    <span>Value 2: <span e1-content="@demoService.trueFalse6"></span></span>
+</div>
+
+<p>Will render text if the first input is greater than the second:
+    <span>
+        <span e1-if="@demoService.ifVal1 > @demoService.ifVal2"><span e1-content='@demoService.ifVal1'></span> is greater than <span e1-content='@demoService.ifVal2'></span></span>
+    </span>
+</p>
+<div>
+    <input type="number" e1-value="@demoService.ifVal1" />
+</div>
+<div>
+    <input type="number" e1-value="@demoService.ifVal2" />
+</div>
+
+<p>Will render text if the first input is greater than or equal to the second:
+    <span>
+        <span e1-if="@demoService.ifVal3 >= @demoService.ifVal4"><span e1-content='@demoService.ifVal3'></span> is <span e1-if="@demoService.ifVal3 > @demoService.ifVal4">greater than</span><span e1-if="@demoService.ifVal3 === @demoService.ifVal4">equal to</span> <span e1-content='@demoService.ifVal4'></span></span>
+    </span>
+</p>
+<div>
+    <input type="text" e1-value="@demoService.ifVal3" />
+</div>
+<div>
+    <input type="text" e1-value="@demoService.ifVal4" />
+</div>
+
+<p>Will render text if the first input is greater than or equal to the second:
+    <span>
+        <span e1-if="@demoService.ifVal5 > 5 && (@demoService.ifVal5 === 6 || @demoService.ifVal5 === 7)"><span e1-content='@demoService.ifVal5'></span> is greater than 5 and is equal to 6 or 7</span>
+    </span>
+</p>
+<div>
+    <input type="number" e1-value="@demoService.ifVal5" />
+</div>

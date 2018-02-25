@@ -5,6 +5,20 @@ class E1Value {
         this.el = el
         this.el["e1-value-onUpdate"] = this.update
 
+        if((this.el.value || (this.el.checked && this.el.type === "checkbox") || (this.el.innerHTML && this.el.tagName.toLowerCase() === "textarea")) && E1.getModel(this.el, "e1-value", undefined) === undefined){
+            this.value = this.el.value
+
+            if(this.el.type === "checkbox"){
+                this.value = true
+            }
+
+            if(this.el.tagName.toLowerCase() === "textarea"){
+                this.value = this.el.innerHTML
+            }
+
+            E1.setModel(this.el, "e1-value", this.value)
+        }
+
         this.setValue()
 
         if(this.el.type === "checkbox"){
@@ -80,9 +94,17 @@ class E1Value {
                 this.value = JSON.stringify(this.value)
             }catch(err){}
         }
+        
+        if (this.el.type === "text" && this.value !== undefined && this.value !== null) {
+            this.value = this.value.toString()
+        }
 
         if (this.el.nodeName.toLowerCase() === "textarea") {
             this.el.innerHTML = this.value
+        }
+
+        if (this.el.type === "number" && this.value !== undefined && this.value !== null) {
+            this.value = parseFloat(this.value)
         }
 
         if (this.el.type === "checkbox") {
@@ -94,10 +116,11 @@ class E1Value {
                 this.el.removeAttribute("value")
             }
         }
+
+        this.el.value = this.value
     }
 
     update() {
-        
         this.setValue()
     }
 }

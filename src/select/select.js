@@ -1,33 +1,31 @@
-const E1 = require("../e1")
+import E1 from "../e1"
 
 class Select {
 	constructor(el) {
 		this.el = el
-        this.update = this.update
+		this.update = this.update
 
-        var html = `
+		var html = `
         <div class="select-container">
-			<span class="select-menu-label"></span>
-			<span class="select-menu-selected-text"></span>
+			<span class="select-menu-label" e1-if="${el.getAttribute("label")}"></span>
+			<input readonly tabindex="-1" type="text" class="select-menu-selected-text" e1-value="${el.getAttribute("value") + ".label"}">
 			<span class="select-menu-options"></span>
-			<span class="select-menu-arrow"></span>
+			<button class="select-menu-arrow"><span style="color:transparent !important; pointer-events:none;">V</span></button>
         </div>`
-        
-        this.el.innerHTML = html
 
-        var selectContainer = el.querySelector(".select-container")
+		this.el.innerHTML = html
+
+		var selectContainer = el.querySelector(".select-container")
 		var clickThrottle = false
 
-		window.document.body.addEventListener("click", (e)=>{
+		window.document.body.addEventListener("click", (e) => {
 			clearTimeout(clickThrottle)
 
-			clickThrottle = setTimeout(()=>{
+			clickThrottle = setTimeout(() => {
 				var target = e.path ? e.path[0] : e.originalTarget ? e.originalTarget : e.target
 
 				try {
-					if (target === el.querySelector(".select-menu-selected-text") || target === el.querySelector(".select-menu-arrow")) {
-						// selectContainer.classList.toggle("mouseenter")
-					} else if (target !== el && !el.contains(target)) {
+					if (target !== el && !el.contains(target)) {
 						selectContainer.classList.remove("mouseenter")
 					}
 				} catch (error) { }
@@ -37,8 +35,9 @@ class Select {
 
 		var leaveTimer
 
-		var mouseenter = () =>{
+		var mouseenter = (e) => {
 			clearTimeout(leaveTimer)
+			e.preventDefault()
 			selectContainer.classList.add("mouseenter")
 		}
 
@@ -46,18 +45,24 @@ class Select {
 
 			el.addEventListener("mouseenter", mouseenter, false)
 
-			el.addEventListener("mouseleave", () =>{
-				leaveTimer = setTimeout( ()=> {
+			el.addEventListener("mouseleave", () => {
+				leaveTimer = setTimeout(() => {
 					selectContainer.classList.remove("mouseenter")
 				}, 10)
 			})
-        }
-        
-        this.update()
-    }
-    
-    handleSelect(e){
-        e.preventDefault()
+		} else {
+			el.addEventListener("touchstart", (e) => {
+				clearTimeout(leaveTimer)
+				e.preventDefault()
+				selectContainer.classList.toggle("mouseenter")
+			}, false)
+		}
+
+		this.update()
+	}
+
+	handleSelect(e) {
+		e.preventDefault()
 		e.stopPropagation()
 
 		var options = E1.getModel(this.el, "options")
@@ -85,7 +90,14 @@ class Select {
 		if (this.el.onselected && typeof this.el.onselected === "function") {
 			this.el.onselected(value, this.el)
 		}
-    }
+	}
+
+	optionFromString(option) {
+		return {
+			value: option.trim(),
+			label: option.trim()
+		}
+	}
 
 	update() {
 
@@ -99,24 +111,39 @@ class Select {
 		var options = E1.getModel(this.el, "options")
 		var value = E1.getModel(this.el, "value")
 
-		this.el.querySelector(".select-menu-selected-text").textContent = (value && value.label ? value.label : "Select")
 
-        var label = this.el.querySelector(".select-menu-label")
-        label.innerHTML = ""
+		if (value && typeof value === "string") {
+			value = this.optionFromString(value)
+			E1.setModel(this.el, "value", value)
+		}
 
-		if (label) {
-			label.appendChild(E1.cleanHtml(E1.getModel(this.el, "label")))
+		var label = this.el.querySelector(".select-menu-label")
+		var labelText = E1.getModel(this.el, "label")
+
+		if (label && labelText) {
+			label.innerHTML = ""
+			label.appendChild(E1.cleanHtml(labelText))
 		}
 
 		try {
 			options = JSON.parse(options)
 		} catch (error) { }
 
+		if (options && typeof options === "string") {
+			options = options.split(",").map((option) => {
+				return this.optionFromString(option)
+			})
+		}
+
 		var optionsContainer = this.el.querySelector(".select-menu-options")
 		optionsContainer.innerHTML = ""
 
 		if (options && Array.isArray(options) && options.length) {
-			options.forEach((element, key)=>{
+			options.forEach((element, key) => {
+				if (typeof element === "string") {
+					element = this.optionFromString(element)
+				}
+
 				var option = window.document.createElement("span")
 				option.className = "select-menu-option"
 				option.textContent = element.label
@@ -126,18 +153,26 @@ class Select {
 
 				var clickThrottle = false
 
-				option.addEventListener("click", (e)=>{
-					clearTimeout(clickThrottle)
+				if (!(/iPad|iPhone|iPod|Android/.test(window.navigator.userAgent))) {
 
-					clickThrottle = setTimeout(()=>{
-						if (selectContainer.classList.contains("mouseenter")) {
-							window.requestAnimationFrame(()=>{
-								this.handleSelect(e)
-								selectContainer.classList.remove("mouseenter")
-							})
-						}
-					}, 10)
-				})
+					option.addEventListener("click", (e) => {
+						clearTimeout(clickThrottle)
+
+						clickThrottle = setTimeout(() => {
+							if (selectContainer.classList.contains("mouseenter")) {
+								window.requestAnimationFrame(() => {
+									this.handleSelect(e)
+									selectContainer.classList.remove("mouseenter")
+								})
+							}
+						}, 10)
+					})
+				} else {
+					option.addEventListener("touchstart", (e) => {
+						this.handleSelect(e)
+						selectContainer.classList.remove("mouseenter")
+					})
+				}
 			});
 		}
 

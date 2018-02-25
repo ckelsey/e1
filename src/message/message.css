@@ -1,0 +1,94 @@
+.popup * {
+	box-sizing: border-box;
+}
+
+.popup .popup-component-wrapper {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.84);
+	top: 0px;
+	left: 0px;
+	z-index: -1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity .5s;
+}
+
+.popup.active .popup-component-wrapper {
+	z-index: 9999;
+	pointer-events: all;
+	opacity: 1;
+}
+
+.popup .popup-component {
+	max-width: 80vw;
+}
+
+.popup .popup-component .popup-component-inner {
+	display: flex;
+	flex-wrap: nowrap;
+	width: 100%;
+	align-items: normal;
+	justify-content: space-between;
+	vertical-align: baseline;
+	background: #fff;
+}
+
+.popup .message-icon {
+	background: #333;
+	color: #fff;
+	padding: 7px;
+	width: 42px;
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+	font-size: 24px;
+}
+
+.popup .message-icon.error {
+	background: #a10005;
+}
+
+.popup .message-icon.warning {
+	background: #e79403;
+}
+
+.popup .message-icon.success {
+	background: #76b900;
+}
+
+.popup .message, .popup .message-icon, .popup .popup-buttons {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.popup .message {
+	padding: 14px 21px;
+	font-size: 14px;
+	display: table-cell;
+	vertical-align: middle;
+	color: #333;
+	align-items: flex-start;
+}
+
+.popup .popup-buttons {
+	flex-direction: row;
+	justify-content: start;
+}
+
+.popup button {
+    display: inline-block;
+    position: relative;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    outline: 0!important;
+    vertical-align: baseline;
+    margin: 14px 7px 0 0;
+}

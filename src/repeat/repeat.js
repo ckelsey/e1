@@ -3,13 +3,14 @@ const E1 = require("../e1")
 class E1Repeat {
     constructor(el) {
         this.el = el
-        this.el["e1-repeat-onUpdate"] = this.update
         this.template = this.el.innerHTML
+        this.el["e1-repeat-onUpdate"] = this.update
         this.update()
     }
 
     update() {
         var model = E1.getModel(this.el, "e1-repeat")
+
         this.el.innerHTML = ""
 
         if(model && model.length){

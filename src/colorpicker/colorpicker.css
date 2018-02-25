@@ -1,0 +1,221 @@
+.color-picker-wrapper{
+    display: inline-block;
+    position: relative;
+    width: 100%;
+}
+
+.color-picker-wrapper input.color-result{
+    padding-left: 42px;
+    cursor: pointer;
+}
+
+.color-picker-wrapper font{
+    content: "";
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    display: block;
+    top: calc(50% - 10px);
+    left: 10px;
+    background-color: currentColor;
+}
+
+e1-colorpicker e1-modal .modal .modal-wrapper{
+    background: transparent;
+    box-shadow: none;
+}
+
+.colorpicker-modal{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    background: rgba(0, 0, 0, 0.93);
+}
+
+.colorpicker-modal .colorpicker-inner{
+    position: relative;
+    width: 90vh;
+    height: 90vh;
+    max-height: 90vh;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.colorpicker-inputs{
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    margin: 0px 0px 21px;
+}
+
+.colorpicker-inputs.bottom{
+    justify-content: center;
+    align-items: stretch;
+}
+
+.color-sample{
+    background: #000;
+    width: 50px;
+    display: flex;
+    position: relative;
+    flex: 1;
+    margin-right: 4%;
+}
+
+.colorpicker-buttons{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.colorpicker-inputs input{
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    text-align: center;
+}
+
+
+.colorpicker-inputs input.color-input{
+    width: 100%;
+}
+
+.colorpicker-inputs .color-inputs{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-grow: 1;
+}
+
+.colorpicker-inputs .color-inputs>div{
+    display: inline-block;
+    flex-grow: 1;
+    margin-left: 4%;
+}
+
+.colorpicker-inputs input[type=number]::-webkit-inner-spin-button, 
+.colorpicker-inputs input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+.colorpicker-inputs .format-selector{
+    max-width: 100px;
+    text-align: left;
+    min-width: 100px;
+    width: 100px;
+    margin-right: 4%;
+}
+
+.colorpicker-inputs .color-button{
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    left: calc(50% - 9px);
+    top: calc(50% - 9px);
+}
+
+.colorpicker-buttons button{
+    position: relative;
+}
+
+.colorpicker-buttons button .btn-spacer{
+    opacity: 0;
+    pointer-events: none;
+}
+
+.colorpicker-inputs .color-button[type="close"]{
+    width: 14px;
+    height: 14px;
+    left: calc(50% - 7px);
+    top: calc(50% - 7px);
+}
+
+e1-colorpicker .input-range{
+    width: 100%;
+    height: 25px;
+    display: block;
+    position: relative;
+    border-radius: 2px;
+    padding: 3px 0px;
+}
+
+e1-colorpicker .input-range-handle{
+    width: 18px;
+    height: 18px;
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .3);
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,.3), 0px 1px 3px rgba(0, 0, 0, 0.5);
+    cursor: ew-resize;
+}
+
+e1-color-slider{
+    display: block;
+    margin: 14px 0;
+}
+
+e1-color-slider[key="a"]{
+    background: linear-gradient(0deg,rgba(138,138,138,.14) 0,rgba(138,138,138,.14) 1px,transparent 1px,transparent 5px),linear-gradient(90deg,rgba(138,138,138,.14) 0,rgba(138,138,138,.14) 1px,transparent 1px,transparent 5px);
+    background-repeat: repeat;
+    background-size: 5px 5px;
+    background-position: 7px 6px;
+    box-shadow: inset 0px 0px 0px 1px rgba(138,138,138,.14);
+}
+
+.previous-colors{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.previous-color{
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    margin: 3px;
+    cursor: pointer;
+}
+
+@media (max-height: 550px) {
+	.colorpicker-modal .colorpicker-inner{
+        flex-direction: row;
+        width: 90vw;
+        max-width: 90vw;
+    }
+
+    .color-right{
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .color-left{
+        width: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        max-width: 300px;
+    }
+
+    body e1-color-wheel{
+        width: 90%;
+        height: 0px;
+        padding-bottom: 90%;
+        margin: 0px;
+        max-width: 90%;
+    }
+}

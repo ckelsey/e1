@@ -1,0 +1,402 @@
+e1-image-viewer {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	display: inline-block;
+	background-color: #1c1c1c;
+	background-repeat: no-repeat;
+	background-size: 40px;
+	background-position: 50% 50%;
+	user-select: none;
+	z-index: 1;
+	overflow: hidden;
+}
+
+e1-image-viewer * {
+	user-select: none;
+}
+
+e1-image-viewer.flat-render {
+	overflow: hidden;
+}
+
+e1-image-viewer.flat-render canvas {
+	transform-origin: 50% 50% 0px;
+}
+
+e1-image-viewer.fullscreen{
+	position: fixed !important;
+	top: 0px;
+	left: 0px;
+	height: 100% !important;
+	width: 100% !important;
+	z-index: 99999;
+}
+
+e1-image-viewer.fullscreen canvas[type="vr"] {
+	top: 0px;
+	left:0px;
+}
+
+e1-image-viewer canvas {
+	padding: 0px !important;
+	cursor: default !important;
+}
+
+e1-image-viewer .canvas-container {
+	padding: 0px;
+}
+
+e1-image-viewer div {
+	display: flex;
+	width: 100%;
+	position: absolute;
+	bottom: 0px;
+	pointer-events: all;
+	justify-content: flex-end;
+	padding: 4px 10px;
+	box-sizing: border-box;
+}
+
+e1-image-viewer .buttonWrapper>button {
+	position: relative;
+	width: 21px;
+	height: 21px;
+	color: #fff;
+	opacity: .7;
+	padding: 0;
+	margin: 7px;
+	right: 0px;
+	cursor: pointer;
+	box-shadow: none;
+}
+
+e1-image-viewer .buttonWrapper button {
+	background: transparent;
+	border: 0;
+	outline: none !important;
+	box-sizing: border-box;
+	pointer-events: all;
+	width: 21px;
+	box-shadow: none;
+}
+
+e1-image-viewer button svg {
+	fill: currentColor;
+	box-sizing: border-box;
+	height: 21px;
+	filter: drop-shadow(0px 0px 2px #000) drop-shadow(0px 0px 1px #000);
+}
+
+e1-image-viewer .renderer-progressbar {
+	display: block;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	height: 5px;
+	width: 0%;
+	padding: 0px;
+	background: #76b900;
+	transition: opacity .5s;
+}
+
+e1-image-viewer div.buttonWrapper {
+	max-height: 40px;
+	position: absolute;
+	left: 0px;
+	bottom: 0px;
+	width: 100%;
+	z-index: 999999999;
+	pointer-events: none;
+}
+
+#crop-positioner {
+	z-index: 9999999;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	top: 0px;
+	left: 0px;
+	pointer-events: none;
+	transition: opacity .2s;
+	display: block;
+	padding: 0px;
+}
+
+#crop-positioner * {
+	pointer-events: none !important;
+}
+
+#crop-positioner.active {
+	opacity: 1;
+}
+
+#crop-positioner table {
+	width: 100%;
+	height: 100%;
+	border-collapse: collapse;
+}
+
+#crop-positioner div {
+	display: block;
+	padding: 0px;
+}
+
+#crop-positioner table td {
+	background: rgba(0, 0, 0, .42);
+}
+
+#crop-positioner.active table td#north-west-handle, #crop-positioner.active table td#north-east-handle, #crop-positioner.active table td#north-handle, #crop-positioner.active table td#south-west-handle, #crop-positioner.active table td#south-east-handle, #crop-positioner.active table td#south-handle, #crop-positioner.active table td#west-handle, #crop-positioner.active table td#east-handle, #crop-positioner.active table td#revealed-space, #crop-positioner.active .positioner-cutout {
+	pointer-events: all !important;
+}
+
+#north-space, #south-space {
+	height: 100%;
+}
+
+#west-space, #east-space {
+	width: 100%;
+}
+
+#crop-positioner.circle table td#revealed-space {
+	border-radius: 50%;
+	box-shadow: 0px 0px 500px 60px rgba(0, 0, 0, 0.64);
+	transform: scale(1.1, 1.1);
+}
+
+#crop-positioner table td .handle {
+	background: rgba(200, 200, 200, .75);
+	box-shadow: inset 0px 0px 0px 1px rgba(50, 50, 50, .75);
+	width: 20px;
+	height: 20px;
+	position: relative;
+	border-radius: 2px;
+	pointer-events: none;
+	transition: transform .2s;
+}
+
+#crop-positioner table td:hover .handle {
+	transform: scale(1.2);
+}
+
+#crop-positioner .positioner-cutout {
+	position: absolute;
+	background: rgba(62, 62, 62, 0.7);
+	display: flex;
+}
+
+#crop-positioner .positioner-cutout.cutout-top, #crop-positioner .positioner-cutout.cutout-bottom {
+	width: 100%;
+	flex-direction: column;
+	left: 0px;
+	height: 10%;
+	cursor: ns-resize;
+}
+
+#crop-positioner .positioner-cutout.cutout-left, #crop-positioner .positioner-cutout.cutout-right {
+	top: 0px;
+	height: 100%;
+	flex-direction: row;
+	min-width: 10px;
+	cursor: ew-resize;
+	width: 10%;
+}
+
+#crop-positioner .positioner-cutout.cutout-top {
+	top: 0%;
+	justify-content: flex-end;
+}
+
+#crop-positioner .positioner-cutout.cutout-bottom {
+	bottom: 0%;
+	justify-content: flex-start;
+}
+
+#crop-positioner .positioner-cutout.cutout-left {
+	justify-content: flex-end;
+	left: 0%;
+}
+
+#crop-positioner .positioner-cutout.cutout-right {
+	justify-content: flex-start;
+	right: 0%;
+}
+
+#crop-positioner .cutout-top .cutout-handle, #crop-positioner .cutout-bottom .cutout-handle, #crop-positioner .cutout-left .cutout-handle, #crop-positioner .cutout-right .cutout-handle {
+	border-color: rgba(176, 176, 176, 0.38);
+	border-style: dotted;
+	border-width: 0px;
+}
+
+#crop-positioner .cutout-top .cutout-handle, #crop-positioner .cutout-bottom .cutout-handle {
+	width: 100%;
+	height: 5px;
+}
+
+#crop-positioner .cutout-top .cutout-handle {
+	border-bottom-width: 1px;
+}
+
+#crop-positioner .cutout-bottom .cutout-handle {
+	border-top-width: 1px;
+}
+
+#crop-positioner .cutout-left .cutout-handle, #crop-positioner .cutout-right .cutout-handle {
+	width: 5px;
+	height: 100%;
+}
+
+#crop-positioner .cutout-left .cutout-handle {
+	border-right-width: 1px;
+}
+
+#crop-positioner .cutout-right .cutout-handle {
+	border-left-width: 1px;
+}
+
+e1-image-viewer .zoom-controls {
+	flex-direction: column;
+	width: 35px;
+	height: 35px;
+	top: 3px;
+	align-items: center;
+	position: relative;
+	transition: all .5s;
+}
+
+e1-image-viewer .zoom-controls:hover, e1-image-viewer .zoom-controls.active, e1-image-viewer .zoom-controls.mobile {
+	height: 125px;
+	top: -94px;
+}
+
+e1-image-viewer .zoom-controls.mobile:hover, e1-image-viewer .zoom-controls.mobile.active, e1-image-viewer .zoom-controls.mobile {
+	height: 35px;
+	top: 0px;
+	width: 85px;
+	flex-direction: row;
+}
+
+e1-image-viewer .zoom-controls button {
+	background: transparent;
+	border: none;
+	color: rgb(255, 255, 255);
+	width: 35px;
+	height: 21px;
+	text-align: center;
+	padding: 0;
+	box-sizing: border-box;
+	display: inline-block;
+	position: relative;
+	cursor: pointer;
+	font-weight: 900;
+	opacity: 0;
+	pointer-events: none;
+	margin: 0px;
+	position: absolute;
+	transition: all .5s;
+	width: 21px;
+	box-shadow: none;
+}
+
+e1-image-viewer .zoom-controls button.zoom-plus {
+	opacity: 0.7;
+	pointer-events: all;
+	height: 21px;
+	position: relative;
+	width: 21px;
+	box-shadow: none;
+}
+
+e1-image-viewer .zoom-controls:hover button.zoom-plus, e1-image-viewer .zoom-controls.active button.zoom-plus, e1-image-viewer .zoom-controls.mobile button.zoom-plus, e1-image-viewer .zoom-controls:hover button, e1-image-viewer .zoom-controls.active button, e1-image-viewer .zoom-controls.mobile button {
+	opacity: 0.7;
+	pointer-events: all;
+	height: 21px;
+	position: relative;
+	width: 21px;
+	box-shadow: none;
+}
+
+e1-image-viewer .zoom-controls button svg {
+	width: 100%;
+	height: 100%;
+}
+
+e1-image-viewer .zoom-controls .zoom-range {
+	flex-grow: 1;
+	display: block;
+	width: 35px;
+	padding: 0px;
+	position: relative;
+	margin: 0px;
+	opacity: 0;
+	pointer-events: none;
+	height: 0px;
+	cursor: ns-resize;
+	transition: all .5s;
+}
+
+e1-image-viewer .zoom-controls .zoom-range:before {
+	display: inline-block;
+	width: 3px;
+	background: rgb(255, 255, 255);
+	margin: 0px auto;
+	height: 0px;
+	content: "";
+	position: absolute;
+	left: calc(50% - 1.5px);
+	transition: all .25s;
+}
+
+e1-image-viewer .zoom-controls:hover .zoom-range, e1-image-viewer .zoom-controls.active .zoom-range {
+	opacity: 0.7;
+	height: auto;
+	pointer-events: all;
+	margin: 5px 0px;
+}
+
+e1-image-viewer .zoom-controls.mobile .zoom-range {
+	opacity: 0;
+	height: auto;
+	pointer-events: none;
+	margin: 5px 0px;
+	cursor: unset;
+}
+
+e1-image-viewer .zoom-controls:hover .zoom-range:before, e1-image-viewer .zoom-controls.active .zoom-range:before {
+	height: 100%;
+}
+
+e1-image-viewer .zoom-controls .zoom-range-handle {
+	width: 13px;
+	height: 0px;
+	background: #fff;
+	position: absolute;
+	display: block;
+	padding: 0px;
+	left: calc(50% - 7px);
+	transform: translateY(5px);
+}
+
+e1-image-viewer .zoom-controls:hover .zoom-range-handle, e1-image-viewer .zoom-controls.active .zoom-range-handle {
+	height: 10px;
+}
+
+.image-renderer {
+	display: block;
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+	background: #1c1c1c;
+	position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+#viewer-canvas[type="360"]{
+	min-width: 100% !important;
+	min-height: 100% !important;
+}

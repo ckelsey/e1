@@ -5,3 +5,48 @@
 <pre><code></code></pre>
 <p>&nbsp;</p>
 <h2>Demo</h2>
+<p>
+    <e1-upload-zone content="@demoService.upload.content" validator="@demoService.upload.validator"></e1-upload-zone>
+</p>
+
+<p>&nbsp;</p>
+
+<p>And with a bit of styling...</p>
+
+<p id="styled_upload">
+    <e1-upload-zone content="@demoService.upload.content" validator="@demoService.upload.validator"></e1-upload-zone>
+</p>
+<style>
+    #styled_upload e1-upload-zone {
+        display: block;
+        width: 100%;
+        height: 200px;
+        border: 1px dashed rgba(255, 255, 255, 0.16);
+        padding: 15px;
+        justify-content: center;
+        align-items: center;
+        background: #292c30;
+        border-radius: 3px;
+    }
+
+    #styled_upload .upload-wrapper {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+
+    #styled_upload input[type="file"] {
+        position: absolute;
+        opacity: 0;
+        -webkit-appearance: none;
+        width: 100%;
+        height: 100%;
+        cursor: -webkit-grab;
+        cursor: hand;
+        appearance: none;
+    }
+</style>

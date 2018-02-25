@@ -1,16 +1,25 @@
-require("./e1")
+import "./e1"
 
-require("./attribute")
-require("./if")
-require("./repeat")
-require("./value")
-require("./content")
-require("./class")
-require("./show")
+import "./attribute"
+import "./if"
+import "./repeat"
+import "./value"
+import "./content"
+import "./class"
+import "./style"
+import "./show"
+import "./proximity"
 
-require("./dropdown")
-require("./accordian-toggle")
-require("./search")
-require("./select")
-
-// require("./e1-test")
+import "./accordian-toggle"
+import "./colorpicker"
+import "./dropdown"
+import "./icon"
+import "./image-viewer"
+import "./message"
+import "./modal"
+import "./search"
+import "./select"
+import "./short-number"
+import "./social-buttons"
+import "./tooltip"
+import "./upload-zone"

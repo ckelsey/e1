@@ -1,0 +1,48 @@
+social-buttons {
+	display: inline-block;
+	height: 100%;
+	width: 100%;
+}
+
+.share {
+	display: flex;
+	height: 100%;
+	justify-content: center;
+	align-items: center;
+}
+
+.share .share-button {
+	width: 100%;
+	border-radius: 50%;
+	margin: 0px 5% 0px 0px;
+	cursor: pointer;
+}
+
+.share .share-button:last-child {
+	margin: 0px;
+}
+
+.share .share-button a {
+	display: block;
+	width: 100%;
+	position: relative;
+	padding-top: 100%;
+	height: 0px;
+}
+
+.share .share-button e1-icon {
+    position: absolute;
+    top: 0px;
+}
+
+.share .share-button.facebook e1-icon {
+	color: #4a6baf !important;
+}
+
+.share .share-button.twitter e1-icon {
+	color: #66c9e8 !important;
+}
+
+.share .share-button.weibo e1-icon {
+	color: #bd4040 !important;
+}

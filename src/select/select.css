@@ -16,35 +16,23 @@
 	box-sizing: border-box;
 }
 
+.select-container input {
+	cursor: pointer;
+	max-width: calc(100% - 36px);
+}
+
 .select-menu-label {
 	vertical-align: middle;
 	margin-right: 5px;
 }
 
 .select-menu-selected-text {
-	display: inline-block;
-	background: #ccc;
-	color: #666;
-	font-size: 14px;
-	padding: 10px;
-	width: calc(100% - 90px);
-	vertical-align: middle;
-	height: 35px;
-	text-overflow: ellipsis;
-	overflow: hidden;
-	flex-grow: 1;
-	line-height: 14px;
+	pointer-events: none;
 }
 
 .select-menu-arrow {
-	background: #666;
-	height: 35px;
-	width: 35px;
-	min-width: 35px;
-	display: inline-flex;
-	vertical-align: middle;
-	align-items: center;
-	justify-content: center;
+	color: transparent !important;
+	position: relative;
 }
 
 .select-menu-arrow:after {
@@ -52,9 +40,12 @@
 	border-right-color: transparent;
 	border-bottom-color: transparent;
 	border-left-color: transparent;
-	margin-bottom: -8px;
 	content: "";
 	transition: margin .2s, transform .2s;
+	display: block;
+	top: calc(50% - 3px);
+    position: absolute;
+    left: calc(50% - 6px)
 }
 
 .select-menu-options {

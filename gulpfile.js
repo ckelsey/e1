@@ -1,107 +1,132 @@
 "use strict";
-var gulp = require("gulp");
-var browserSync = require("browser-sync").create();
+var watchify = require('watchify');
+var browserify = require('browserify');
+var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
+var assign = require('lodash.assign');
+var stringify = require('stringify');
+var plugins = require('gulp-load-plugins')();
+var minifyCSS = require('gulp-minify-css');
 
-var watchify = require("watchify");
-var browserify = require("browserify");
-var source = require("vinyl-source-stream");
-var buffer = require("vinyl-buffer");
-var assign = require("lodash.assign");
-var stringify = require("stringify");
-var plugins = require("gulp-load-plugins")();
-var minifyCSS = require("gulp-minify-css");
-var fs = require("fs");
+var gulp = require('gulp');
+var browserSync = require('browser-sync').create();
+var webpack = require('webpack');
+var gutil = require('gulp-util');
+var path = require("path")
+var jshint = require('gulp-jshint')
+var WebpackDevServer = require('webpack-dev-server')
+var config = require('./webpack.config.js');
+var compiler = webpack(config);
+
+var paths = {
+	watch: ["./src/*,", "./src/**/*", "./demo/*"],
+	jshint: ["src/*.js,", "src/**/*.js"]
+}
+
+gulp.task('webpack', function(done){
+	compiler.run(onBuild(done));
+});
+
+function onBuild(done) {
+    return function(err, stats) {
+		
+		if (err) {
+		   
+			gutil.log('Error', err);
+			
+			if (done) {
+                done();
+			}
+			
+        } else {
+            Object.keys(stats.compilation.assets).forEach(function(key) {
+                gutil.log('Webpack: output ', gutil.colors.green(key));
+            });
+			
+			gutil.log('Webpack: ', gutil.colors.blue('finished ', stats.compilation.name));
+			
+			if (done) {
+                done();
+            }
+        }
+    }
+}
 
 
-var buildFiles = [
-	"fav.png",
-	"index.html",
-	"demo-service.js",
-	"demo-styles.css",
-    "dist/e1.min.css",
-	"dist/e1.min.js",
-	"dist/e1.min.js.map",
-	"node_modules/prismjs/themes/prism-twilight.css",
-	"node_modules/prismjs/themes/prism.css",
-	"node_modules/prismjs/prism.js",
-	"demo/**.*"
+
+
+
+gulp.task('jshint', function() {
+    return gulp.src(paths.jshint)
+        .pipe(jshint())
+        .pipe(jshint.reporter('default'));
+});
+
+
+
+
+
+
+
+var babelPlugins = [
+	require('babel-plugin-transform-es2015-modules-commonjs'),
 ]
 
-function moveToBuild() {
-	if (!fs.existsSync("docs")){
-		fs.mkdirSync("docs")
-	}
-	
-	gulp.src(buildFiles).pipe(gulp.dest("docs"));
+var demoServiceOptions = assign({}, watchify.args,{
+	entries: ['./demo/index.js']
+});
+
+var demoService = watchify(browserify(demoServiceOptions)
+	.transform(stringify, { minify: true })
+	.transform(require('babelify'), {
+		presets: [require('babel-preset-env')],
+		plugins: babelPlugins
+	})
+);
+
+gulp.task('demoService', bundleDemoService);
+demoService.on('update', bundleDemoService);
+demoService.on('log', plugins.util.log);
+
+function bundleDemoService() {
+	return demoService.bundle()
+		.on('error', plugins.util.log.bind(plugins.util, 'Browserify Error'))
+		.pipe(source('demo.js'))
+		.pipe(buffer())
+		.pipe(plugins.uglifyEs.default())
+		.pipe(gulp.dest('./docs'))
+		.on('end', function () { plugins.util.log('Done!'); });
 }
-gulp.task("moveToBuild", moveToBuild)
 
-/* BROWSER SYNC
-* Starts bower server
-*/
 
-gulp.task("browser-sync", function () {
+
+
+
+gulp.task('server', function () {
 	browserSync.init({
 		server: {
-			baseDir: "./docs"
+			baseDir: "./docs/"
 		},
-		https: true
+		https: true,
+		port: 3004
 	});
 });
 
-var styles = ["src/**/*.css"]
-function css() {
-	gulp.src(styles)
-		.pipe(minifyCSS())
-		.pipe(plugins.concat("e1.min.css"))
-		.pipe(gulp.dest("dist"))
-}
-gulp.task("minifyCSS", css);
-
-var babelPlugins = [
-	require("babel-plugin-transform-es2015-modules-commonjs"),
+const docs = [
+	"./demo/*.html",
+	"./demo/*.css",
+	"./demo/prism.js",
+	"./dist/*"
 ]
 
-var bableOptions = assign({}, watchify.args,{
-	entries: ["./src/index.js"],
-	debug: true
+gulp.task('moveDocs', function () {
+	return gulp.src(docs).pipe(gulp.dest('./docs'))
 });
 
-var bundle = watchify(browserify(bableOptions)
-	.transform(stringify, { minify: true })
-	.transform(require("babelify"), {
-		presets: [require("babel-preset-env")],
-		plugins: babelPlugins
-	})
-)
-
-function bundleJS() {
-	return bundle.bundle()
-		.on("error", plugins.util.log.bind(plugins.util, "Browserify Error"))
-		.pipe(source("e1.min.js"))
-		.pipe(buffer())
-		.pipe(plugins.sourcemaps.init({ loadMaps: true }))
-		.pipe(plugins.uglifyEs.default())
-		.pipe(plugins.sourcemaps.write("./"))
-		.pipe(gulp.dest("./dist"))
-		.on("end", function () { plugins.util.log("Done!"); });
-}
-
-gulp.task("bundle", bundleJS);
-bundle.on("update", bundleJS);
-bundle.on("log", plugins.util.log);
-
-
-gulp.task("live", function () {
-	gulp.watch(styles, ["minifyCSS"]);
-	gulp.watch(buildFiles, ["moveToBuild"]);
+gulp.task("dev", ["webpack", "server", "jshint", "moveDocs", "demoService"], function() {
+	gulp.watch(paths.watch, ["webpack", "jshint", "moveDocs", "demoService"]);
 });
-
 
 gulp.task("default", [
-	"browser-sync",
-	"bundle",
-    "minifyCSS",
-    "moveToBuild",
-	"live"
+	"dev"
 ], function () { });

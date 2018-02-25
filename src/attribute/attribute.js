@@ -9,8 +9,7 @@ class E1Attribute {
 
     renderAttributes() {
         var attrString = this.el.getAttribute("e1-attribute")
-        var attributes = attrString.split(",").map(c => { return c.trim() })
-        var attrQueue = []
+        var attributes = attrString.split("&&").map(c => { return c.trim() })
 
         attributes.forEach(attr => {
             var valueAttr = attr.split(":").map(c => { return c.trim() })

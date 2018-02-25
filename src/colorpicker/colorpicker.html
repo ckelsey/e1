@@ -1,0 +1,77 @@
+<div class="color-picker-wrapper">
+    <div class="colorpicker-modal" e1-show="@ColorPickerService.pickers.{{picker}}.modal.active">
+        <div class="colorpicker-inner">
+            <div class="color-left">
+                <e1-color-wheel picker="@ColorPickerService.pickers.{{picker}}"></e1-color-wheel>
+            </div>
+            <div class="color-right">
+                <e1-color-slider picker="@ColorPickerService.pickers.{{picker}}" key="s" max=100></e1-color-slider>
+                <e1-color-slider picker="@ColorPickerService.pickers.{{picker}}" key="a" max=1></e1-color-slider>
+                <div class="colorpicker-inputs">
+                    <div class="format-selector">
+                        <label>Format</label>
+                        <e1-select options="@ColorPickerService.formats" value="@ColorPickerService.pickers.{{picker}}.type"></e1-select>
+                    </div>
+                    <div class="color-inputs">
+                        <div e1-show="@ColorPickerService.pickers.{{picker}}.type.label === 'HEX'">
+                            <label>HEX</label>
+                            <input class="color-input hex" type="text" color="hex" e1-value="@ColorPickerService.pickers.{{picker}}.values.hex">
+                        </div>
+                        <div e1-show="@ColorPickerService.pickers.{{picker}}.type.label === 'HSL'">
+                            <label>H</label>
+                            <input class="color-input" type="number" color="h" e1-value="@ColorPickerService.pickers.{{picker}}.values.h" min=0 max=359>
+                        </div>
+                        <div e1-show="@ColorPickerService.pickers.{{picker}}.type.label === 'HSL'">
+                            <label>S</label>
+                            <input class="color-input" type="number" color="s" e1-value="@ColorPickerService.pickers.{{picker}}.values.s" min=0 max=100>
+                        </div>
+                        <div e1-show="@ColorPickerService.pickers.{{picker}}.type.label === 'HSL'">
+                            <label>L</label>
+                            <input class="color-input" type="number" color="l" e1-value="@ColorPickerService.pickers.{{picker}}.values.l" min=0 max=100>
+                        </div>
+                        <div e1-show="@ColorPickerService.pickers.{{picker}}.type.label === 'RGB'">
+                            <label>R</label>
+                            <input class="color-input" type="number" color="r" e1-value="@ColorPickerService.pickers.{{picker}}.values.r" min=0 max=255>
+                        </div>
+                        <div e1-show="@ColorPickerService.pickers.{{picker}}.type.label === 'RGB'">
+                            <label>G</label>
+                            <input class="color-input" type="number" color="g" e1-value="@ColorPickerService.pickers.{{picker}}.values.g" min=0 max=255>
+                        </div>
+                        <div e1-show="@ColorPickerService.pickers.{{picker}}.type.label === 'RGB'">
+                            <label>B</label>
+                            <input class="color-input" type="number" color="b" e1-value="@ColorPickerService.pickers.{{picker}}.values.b" min=0 max=255>
+                        </div>
+                        <div e1-show="@ColorPickerService.pickers.{{picker}}.type.label !== 'HEX' && @ColorPickerService.pickers.{{picker}}.values.a !== 1">
+                            <label>A</label>
+                            <input class="color-input" type="number" color="a" e1-value="@ColorPickerService.pickers.{{picker}}.values.a" min=0 max=1
+                                step="0.01">
+                        </div>
+                    </div>
+                </div>
+                <div class="colorpicker-inputs bottom">
+                    <div class="color-sample"></div>
+                    <div class="colorpicker-buttons">
+                        <div>
+                            <button class="save-color">
+                                <span class="btn-spacer">W</span>
+                                <e1-icon type="check" class="color-button"></e1-icon>
+                            </button>
+                        </div>
+                        <div>
+                            <button class="cancel-color">
+                                <span class="btn-spacer">W</span>
+                                <e1-icon type="close" class="color-button"></e1-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="previous-colors" e1-repeat="@ColorPickerService.previousColors" delimiter="$key">
+                    <div class="previous-color" e1-style="@ColorPickerService.previousColors.$key:background-color" onclick="E1.setModel(null, '{{colorAttr}}', '@ColorPickerService.previousColors.$key')"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input readonly class="color-result" type="text" e1-value="{{colorAttr}}">
+    <font e1-style="{{colorAttr}}:background-color"></font>
+</div>

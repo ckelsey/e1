@@ -1,0 +1,6 @@
+require("./colorpicker-service")
+require("./colorwheel")
+require("./colorwheel.css")
+require("./color-slider")
+require("./colorpicker")
+require("./colorpicker.css")

@@ -1,7 +1,22 @@
 <h2>e1-modal</h2>
-<p></p>
+<p>This is a modal element that takes an html string. Note that the html will be striped of script tags and invalid html.</p>
 <p>&nbsp;</p>
 <h2>Markup</h2>
 <pre><code></code></pre>
 <p>&nbsp;</p>
 <h2>Demo</h2>
+<p demo-el><e1-modal content="@demoService.modal.content" active="@demoService.modal.active"></e1-modal></p>
+<button onclick="E1.setModel(null, '@demoService.modal.active', true)">Open modal</button>
+<p>&nbsp;</p>
+<div class="box">
+    <h3>Attributes</h3>
+    <div>
+        <label>content <small> - html string</small></label>
+        <input type="text" e1-value="@demoService.modal.content">
+    </div>
+    <p>&nbsp;</p>
+    <div>
+        <label>active <small> - boolean</small></label>
+        <input type="checkbox" e1-value="@demoService.modal.active">
+    </div>
+</div>

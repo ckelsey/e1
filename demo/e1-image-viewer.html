@@ -1,7 +1,37 @@
 <h2>e1-image-viewer</h2>
 <p></p>
 <p>&nbsp;</p>
-<h2>Markup</h2>
-<pre><code></code></pre>
-<p>&nbsp;</p>
 <h2>Demo</h2>
+<div>
+    <e1-select label="Select an image" options="@demoService.image.options" value="@demoService.image.options.0" onselected="@demoService.image.onselect"></e1-select>
+    <button e1-if="@demoService.image.crop === true" onclick="document.querySelector('e1-image-viewer').downloadScreenshot()">Take screenshot</button>
+</div>
+<p>&nbsp;</p>
+<div demo-el>
+    <e1-image-viewer type="@demoService.image.type" url="@demoService.image.url" preview="@demoService.image.preview" crop="@demoService.image.crop"></e1-dropdown>
+</div>
+<div class="box">
+    <h3>Markup</h3>
+    <pre><code></code></pre>
+    <p>&nbsp;</p>
+    <h3>Attributes</h3>
+    <div>
+        <label>type</label>
+        <input type="text" e1-value="@demoService.image.type" />
+    </div>
+    <p>&nbsp;</p>
+    <div style="margin-top: 21px;">
+        <label>url</label>
+        <input type="text" e1-value="@demoService.image.url">
+    </div>
+    <p>&nbsp;</p>
+    <div style="margin-top: 21px;">
+        <label>preview</label>
+        <input type="text" e1-value="@demoService.image.preview">
+    </div>
+    <p>&nbsp;</p>
+    <div style="margin-top: 21px;">
+        <label>crop</label>
+        <input type="checkbox" e1-value="@demoService.image.crop">
+    </div>
+</div>

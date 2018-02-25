@@ -1,3 +1,5 @@
+const vm = require('vm');
+
 class E1 {
 	constructor() {
 		this.bindings = {}
@@ -25,6 +27,10 @@ class E1 {
 				var components = Object.keys(this.components)
 
 				var initElement = (element, componentName) => {
+					if (!element.hasAttribute || !element.querySelectorAll) {
+						return
+					}
+
 					if (element.nodeName && element.nodeName.toLowerCase() === componentName) {
 						this.components[componentName]._initElement(element)
 					}
@@ -35,46 +41,37 @@ class E1 {
 
 					var elements = element.querySelectorAll(componentName)
 
-					if(!elements.length){
+					if (!elements.length) {
 						elements = element.querySelectorAll("[" + componentName + "]")
 					}
 
+
+					if (elements.length) {
 					
-					if(elements.length){
-						for (var i = 0; i < elements.length; i++) {
-							this.components[componentName]._initElement(elements[i])
+						for (var j = 0; j < elements.length; j++) {
+							this.components[componentName]._initElement(elements[j])
+						}
+					}
+				}
+
+				var loopComponents = (node)=>{
+					components.forEach((componentName) => {
+						initElement(node, componentName)
+					})
+				}
+
+				var loopAddedNodes = (addedNodes)=>{
+					for (var i = 0; i < addedNodes.length; i++) {
+						if (addedNodes[i].nodeType !== 3) {
+							loopComponents(addedNodes[i])
 						}
 					}
 				}
 
 				records.forEach((record) => {
 					if (record.addedNodes.length) {
-						for (var i = 0; i < record.addedNodes.length; i++) {
-							if(record.addedNodes[i].nodeType !== 3){
-								components.forEach((componentName) => {
-									initElement(record.addedNodes[i], componentName)
-								})
-							}
-						}
+						loopAddedNodes(record.addedNodes)
 					}
-
-					// if(record.removedNodes.length){
-					// 	console.log(record.removedNodes)
-					// 	var bindingKeys = Object.keys(this.bindings)
-
-					// 	for (var i = 0; i < record.removedNodes.length; i++) {
-					// 		if(record.removedNodes[i].nodeType !== 3){
-					// 			bindingKeys.forEach((bindingKey) => {
-					// 				this.bindings[bindingKey].forEach((el, index) => {
-					// 					if(el.hasAttribute("component-id") && record.removedNodes[i].hasAttribute("component-id") && el.getAttribute("component-id") === record.removedNodes[i].getAttribute("component-id")){
-					// 						// console.log("removing ", el)
-					// 						// this.bindings[bindingKey].splice(index, 1)
-					// 					}
-					// 				})
-					// 			})
-					// 		}
-					// 	}
-					// }
 				})
 			}
 		)
@@ -88,15 +85,15 @@ class E1 {
 			: ""
 
 		var match = /<\s*\w.*?>/g.exec(html)
-		var element = document.createElement('div')
+		var element = window.document.createElement('div')
 
 		if (match !== null) {
-			if(contextNode && contextNode.parentNode){
-				var range = document.createRange()
+			if (contextNode && contextNode.parentNode) {
+				var range = window.document.createRange()
 				range.selectNode(contextNode)
 				element = range.createContextualFragment(html)
-			}else{
-				element = document.createRange().createContextualFragment(html)
+			} else {
+				element = window.document.createRange().createContextualFragment(html)
 			}
 
 			element = element.lastChild
@@ -189,6 +186,18 @@ class E1 {
 				return emptyVal
 			}
 
+			if (currentValue.indexOf(".") === -1 && currentValue.indexOf("(") > -1) {
+				/* TODO: this gets messed up by the parsing of attrs the have multiple value bindings separated by a comma */
+				var argsString = /\((.*?)\)/g.exec(currentValue)[1]
+				var args = argsString.split(",").map((arg) => { return arg.trim() })
+				var functionName = currentValue.split("(")[0]
+
+				if (typeof accumulator[functionName] === "function") {
+					var result = accumulator[functionName].apply(accumulator, args)
+					return result
+				}
+			}
+
 			if (currentValue) {
 				return accumulator[currentValue]
 			} else {
@@ -204,15 +213,44 @@ class E1 {
 		return result
 	}
 
+	isTruthy(expression) {
+		var values = expression.split(/(?:\(|\)|\|\||&&|<=|<|>=|>|===|!==)+/g).map(b => { return b.trim() })
+
+		// Sorting so longest paths first
+		// Needed for similar path names
+		values.sort(function(a,b){
+			return a.length > b.length ? -1 : a.length < b.length ? 1 : 0
+		})
+
+		values.forEach(v => {
+			if(v.substring(0,1) === "@"){
+				var model = this.getModel(null, v)
+
+				if(isNaN(model)){
+					expression = expression.split(v).join("'" + model + "'")
+				}else{
+					expression = expression.split(v).join(model)
+				}
+			}
+		})
+
+		vm.createContext()
+		
+		try{
+			return vm.runInNewContext(expression)
+		}catch(e){
+			return false
+		}
+	}
+
 	registerComponent(name, service) {
 		this.components[name] = {
 			service: service,
 			_initElement: (el) => {
 				if (this.components[name].registeredElements.indexOf(el) === -1) {
+					this.registerElement(el)
 					var thisService = new this.components[name].service(el)
 					this.components[name].registeredElements.push(el)
-					el.setAttribute("component-id", this.generateId())
-					el["component-id"] = el.getAttribute("component-id")
 
 					if (!el.onUpdate) {
 						el.onUpdate = []
@@ -220,8 +258,11 @@ class E1 {
 
 					el.onUpdate.push(thisService.update.bind(thisService))
 
-					this.registerElement(el)
 
+				} else if (el.onUpdate && Array.isArray(el.onUpdate) && el.onUpdate.length) {
+					el.onUpdate.forEach(cb => {
+						cb()
+					})
 				}
 			},
 			registeredElements: [],
@@ -246,20 +287,20 @@ class E1 {
 			service: service,
 			_initElement: (el) => {
 				if (this.components[name].registeredElements.indexOf(el) === -1) {
+					this.registerElement(el)
 					var thisService = new this.components[name].service(el)
 					this.components[name].registeredElements.push(el)
 
-					if(!el.hasAttribute("component-id")){
-						el.setAttribute("component-id", this.generateId())
-						el["component-id"] = el.getAttribute("component-id")
-					}
 
 					if (!el.onUpdate) {
 						el.onUpdate = []
 					}
 
 					el.onUpdate.push(thisService.update.bind(thisService))
-					this.registerElement(el)
+				} else if (el.onUpdate && Array.isArray(el.onUpdate) && el.onUpdate.length) {
+					el.onUpdate.forEach(cb => {
+						cb()
+					})
 				}
 			},
 			registeredElements: [],
@@ -282,23 +323,32 @@ class E1 {
 	registerElement(el) {
 		if (!el || !el.attributes) { return }
 
+		if (!el.hasAttribute("component-id")) {
+			el.setAttribute("component-id", this.generateId())
+			el["component-id"] = el.getAttribute("component-id")
+		}
+
 		var attributes = el.attributes
+
+		var handleBindings = (bindings, _el)=>{
+			bindings.forEach(binding => {
+				var conditionalBinding = binding.split(/\?|\:/g).map(b => { return b.trim() })[0]
+
+				if (!this.bindings[conditionalBinding]) {
+					this.bindings[conditionalBinding] = []
+				}
+
+				this.bindings[conditionalBinding].push(_el)
+			})
+		}
 
 		for (var i = 0; i < attributes.length; i++) {
 			var attributeValue = attributes[i].value
 
 			if (attributeValue.substring(0, 1) === "@") {
-				var bindings = attributeValue.split(",").map(b => { return b.trim() })
+				var bindings = attributeValue.split(/(?:\(|\)|\|\||&&|<=|<|>=|>|===|!==)+/g).map(b => { return b.trim() })
 
-				bindings.forEach(binding => {
-					var conditionalBinding = binding.split(":")[0]
-
-					if (!this.bindings[conditionalBinding]) {
-						this.bindings[conditionalBinding] = []
-					}
-
-					this.bindings[conditionalBinding].push(el)
-				})
+				handleBindings(bindings, el)
 			}
 		}
 	}
@@ -354,6 +404,10 @@ class E1 {
 		var clone = this.getThis(service, path)
 
 		try { clone = JSON.parse(JSON.stringify(clone)) } catch (e) { }
+
+		if(value.substring && value.substring(0,1) === "@"){
+			value = this.getModel(null, value, value)
+		}
 
 		this.setThis(service, path, value)
 
@@ -423,15 +477,17 @@ class E1 {
 			})
 		}
 
+
+
 		if (elements && elements.length) {
-			elements.forEach((element) => {
+			elements.forEach(element => {
 				var isShown = window.document.body.contains(element)
-				
-				if(element.hasAttribute("e1-if") && this.getModel(element, "e1-if")){
+
+				if ((element.hasAttribute("e1-if") && this.isTruthy(element.getAttribute("e1-if"))) || (element.hasAttribute("e1-show") && this.isTruthy(element.getAttribute("e1-show")))) {
 					isShown = true
 				}
 
-				if (isShown && element.onUpdate) {
+				if (isShown && Array.isArray(element.onUpdate) && element.onUpdate.length) {
 					element.onUpdate.forEach((callback) => {
 						callback()
 					})
@@ -441,7 +497,7 @@ class E1 {
 
 		if (clone && typeof clone === "object") {
 			for (var p in clone) {
-				if (clone[p]) {
+				if (clone.hasOwnProperty(p)) {
 					this.updateBindings(path + "." + p, clone[p])
 				}
 			}
