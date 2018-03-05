@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>E1</title>
+	<link rel="stylesheet" href="/prism.css" />
+	<script src="prism.js"></script>
+	<link href="https://unpkg.com/mocha@4.0.1/mocha.css" rel="stylesheet" />
+	<link rel="stylesheet" href="/demo-styles.css" />
+	<link rel="stylesheet" href="/e1.css" />
+</head>
+
+<body>
+	<div id="mocha"></div>
+
+	<div id="main-content"></div>
+
+	<script src="e1.js"></script>
+	<script src="demo.js"></script>
+	<script src="https://unpkg.com/chai@4.1.2/chai.js"></script>
+	<script src="https://unpkg.com/mocha@4.0.1/mocha.js"></script>
+
+	<script>
+		mocha.setup('bdd')
+		mocha.checkLeaks();
+	</script>
+
+	<script src="e2e.js"></script>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			E1.services.demoService.initTests()
+		});
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+e1-edit .edit-wrapper{
+    display: inline-flex;
+    align-items: center;
+}
+
+e1-edit .edit-wrapper [contenteditable]{
+    outline: none !important;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+e1-edit .edit-buttons{
+    display: flex;
+    align-items: center;
+}
+
+e1-edit .edit-buttons span{
+    display: inline-block;
+}
+
+e1-edit .edit-buttons span e1-icon{
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    padding: 4px 6px;
+    background: rgba(255, 255, 255, 0.25);
+    margin: 0px 4px;
+}
+
+e1-edit .edit-buttons span e1-icon[type="check"]{
+    padding: 5px 6px;
+}
+
+e1-edit .edit-buttons span e1-icon[type="close"]{
+    padding: 3px 7px;
+}

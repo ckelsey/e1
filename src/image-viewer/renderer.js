@@ -79,6 +79,18 @@ if (!window.HTMLCanvasElement.prototype.toBlob) {
 			window.document.addEventListener('MSFullscreenChange', doFullscreenChange, false);
 		}
 
+		download() {
+			var canvas = this.data.element.querySelector("canvas")
+			canvas.toBlob((file) => {
+
+				var a = window.document.createElement("a")
+				a.download = true
+				a.href = window.URL.createObjectURL(file)
+				a.click()
+
+			})
+		}
+
 		isFullscreen() {
 			return this.fullscreen
 		}
@@ -121,10 +133,12 @@ if (!window.HTMLCanvasElement.prototype.toBlob) {
 				this.enterFullscreen()
 			}
 
-			var iOS = !!window.navigator.platform && /iPad|iPhone|iPod/.test(window.navigator.platform);
-			if (iOS) {
-				this.fullscreen = !this.fullscreen
-			}
+			this.fullscreen = !this.fullscreen
+
+			// var iOS = !!window.navigator.platform && /iPad|iPhone|iPod/.test(window.navigator.platform);
+			// if (iOS) {
+			// 	this.fullscreen = !this.fullscreen
+			// }
 		}
 
 		keyDown(self, e) {
@@ -245,6 +259,7 @@ if (!window.HTMLCanvasElement.prototype.toBlob) {
 				window.document.removeEventListener('MSFullscreenChange', exitHandler, false);
 
 				var fullscreenButton = window.document.createElement("button");
+				fullscreenButton.className = "fullscreen-button"
 				fullscreenButton.innerHTML = '<e1-icon type="fullscreen"></e1-icon>'
 				fullscreenButton.addEventListener('click', fullscreen.bind(options.self), false);
 				buttonWrapper.appendChild(fullscreenButton);

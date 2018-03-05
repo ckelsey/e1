@@ -73,7 +73,7 @@
 
 				if (this.canDoVr) {
 					this.data.instance.renderer = new RenderVR(this.data)
-					return 
+					return
 				}
 
 				this.run()
@@ -106,14 +106,14 @@
 		}
 
 		_resize(self) {
-			
+
 			if (self.data.instance.isFullscreen()) {
 				self.canvasWrapper.parentNode.classList.add("fullscreen")
 			} else {
 				self.canvasWrapper.parentNode.classList.remove("fullscreen")
 			}
-			
-			if(self.renderer){
+
+			if (self.renderer) {
 				self.renderer.setSize(self.canvasWrapper.offsetWidth, self.canvasWrapper.offsetHeight)
 				self.camera.aspect = self.renderer.domElement.clientWidth / self.renderer.domElement.clientHeight
 				self.camera.updateProjectionMatrix()
@@ -201,7 +201,7 @@
 			}
 
 			var runZoom = () => {
-				window.requestAnimationFrame( () => {
+				window.requestAnimationFrame(() => {
 					if (self.zoomQueue.length) {
 						var queueAmount = self.zoomQueue.shift()
 						self.distance = self.distance + queueAmount
@@ -243,7 +243,7 @@
 			this.hasLoadedControls = true
 			this._resize(this)
 
-			if(ready){
+			if (ready) {
 				this.ready = true
 				this.sendUpdate()
 			}
@@ -291,19 +291,19 @@
 
 			this.canvasWrapper.parentNode.style.paddingTop = '5px;'
 
-			Utils.initImages(this.data, (_img)=> {
+			Utils.initImages(this.data, (_img) => {
 				this.originalImage = _img
 				this.canvasWrapper.parentNode.style.display = "block";
 				this.canvasWrapper.parentNode.style.height = "0px";
 				this.canvasWrapper.parentNode.style.width = "100%";
-				this.canvasWrapper.parentNode.style.paddingTop = ((9/16) * 100) + "%";
+				this.canvasWrapper.parentNode.style.paddingTop = ((9 / 16) * 100) + "%";
 				this.finish(_img, true)
 				this.resolve()
-			}, (_img) =>{
+			}, (_img) => {
 				this.canvasWrapper.parentNode.style.display = "block";
 				this.canvasWrapper.parentNode.style.height = "0px";
 				this.canvasWrapper.parentNode.style.width = "100%";
-				this.canvasWrapper.parentNode.style.paddingTop = ((9/16) * 100) + "%";
+				this.canvasWrapper.parentNode.style.paddingTop = ((9 / 16) * 100) + "%";
 				this.finish(_img)
 			}, this.reject)
 		}

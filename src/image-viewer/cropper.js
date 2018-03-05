@@ -363,49 +363,142 @@
 		}
 
 		screenshotCanvas() {
-			var coords = this.getCoordinates();
-			var ctx = window.document.createElement("canvas").getContext("2d")
-			var w = 600
-			var h = coords.height * (600 / coords.width)
+			var self = this
+			try {
+				var coords = self.getCoordinates();
+				var ctx = window.document.createElement("canvas").getContext("2d")
+				var w = 600
+				var h = coords.height * (600 / coords.width)
 
-			if (h < 300) {
-				w = w * (300 / h)
-				h = 300
+				if (h < 300) {
+					w = w * (300 / h)
+					h = 300
+				}
+
+				ctx.canvas.width = w
+				ctx.canvas.height = h
+
+				var x = coords.x
+				var y = coords.y
+				var width = coords.width
+				var height = coords.height
+
+				var revealed = self._data.element.querySelector("#revealed-space")
+				var westHandle = self._data.element.querySelector("#west-handle")
+				var northHandle = self._data.element.querySelector("#north-handle")
+
+				x = ((westHandle.getBoundingClientRect().left - self.canvas.getBoundingClientRect().left) / self.canvas.getBoundingClientRect().width) * self.canvas.offsetWidth
+				y = ((northHandle.getBoundingClientRect().top - self.canvas.getBoundingClientRect().top) / self.canvas.getBoundingClientRect().height) * self.canvas.offsetHeight
+				width = (((westHandle.getBoundingClientRect().width * 2) + revealed.getBoundingClientRect().width) / self.canvas.getBoundingClientRect().width) * self.canvas.offsetWidth
+				height = (((northHandle.getBoundingClientRect().height * 2) + revealed.getBoundingClientRect().height) / self.canvas.getBoundingClientRect().height) * self.canvas.offsetHeight
+
+				var tmp = self.canvas
+
+				var normalScreen = (tmp, x, y, width, height, w, h) => {
+					ctx.drawImage(
+						tmp,
+						x,
+						y,
+						width,
+						height,
+						0, 0, w, h
+					)
+					return ctx.canvas
+				}
+
+				var alternateScreen = (tmp, x, y, width, height, w, h) => {
+					var glAttribs = {
+						antialias: true,
+						preserveDrawingBuffer: true
+					}
+					var tmpCtx = window.document.createElement("canvas").getContext("2d")
+					var gl = tmp.getContext("webgl", glAttribs) || tmp.getContext("experimental-webgl")
+
+					var _width = tmpCtx.canvas.width = tmp.width;
+					var _height = tmpCtx.canvas.height = tmp.height;
+
+					var size = _width * _height * 4;
+					var pixels = new Uint8Array(size);
+					var image = tmpCtx.createImageData(_width, _height);
+
+					gl.readPixels(0, 0, _width, _height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+
+					for (var i = 0; i < size; i++) {
+						image.data[i] = pixels[i];
+					}
+
+					tmpCtx.putImageData(image, 0, 0)
+
+					ctx.drawImage(
+						tmpCtx.canvas,
+						x,
+						y,
+						width,
+						height,
+						0, 0, w, h
+					)
+
+					var _imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height)
+					var flipped = window.document.createElement("canvas")
+					var flippedCTX = flipped.getContext('2d');
+					flipped.width = _imageData.width;
+					flipped.height = _imageData.height;
+					flippedCTX.putImageData(_imageData, 0, 0);
+					// flippedCTX.globalCompositeOperation = 'copy';
+					flippedCTX.scale(1, -1); // Y flip
+					flippedCTX.translate(0, -_imageData.height); // so we can draw at 0,0
+					flippedCTX.drawImage(flipped, 0, 0);
+					flippedCTX.setTransform(1, 0, 0, 1, 0, 0);
+					flippedCTX.globalCompositeOperation = 'source-over';
+
+					return flipped
+				}
+
+				var testForBlank = (c) => {
+					var pixels = c.getContext("2d").getImageData(0, 0, c.width, c.height).data
+					var isNotBlank = false
+
+					for (var i = 0, n = pixels.length; i < n; i += 4) {
+
+						if (pixels[i] !== 0 || pixels[i + 1] !== 0 || pixels[i + 2] !== 0) {
+							isNotBlank = true
+							break
+						}
+					}
+
+					if (!isNotBlank) {
+						return false
+					}
+
+					return true
+				}
+
+				var canvas = normalScreen(tmp, x, y, width, height, w, h)
+				var isGood = testForBlank(canvas)
+
+				if (!isGood) {
+
+					canvas = alternateScreen(tmp, x, y, width, height, w, h)
+					isGood = testForBlank(canvas)
+
+					if (isGood) {
+						return canvas
+					} else {
+						return false
+					}
+				} else {
+					return canvas
+				}
+			} catch (err) {
+				return false
 			}
-
-			ctx.canvas.width = w
-			ctx.canvas.height = h
-
-			var x = coords.x
-			var y = coords.y
-			var width = coords.width
-			var height = coords.height
-
-			var revealed = this._data.element.querySelector("#revealed-space")
-			var westHandle = this._data.element.querySelector("#west-handle")
-			var northHandle = this._data.element.querySelector("#north-handle")
-
-			x = ((westHandle.getBoundingClientRect().left - this.canvas.getBoundingClientRect().left) / this.canvas.getBoundingClientRect().width) * this.canvas.offsetWidth
-			y = ((northHandle.getBoundingClientRect().top - this.canvas.getBoundingClientRect().top) / this.canvas.getBoundingClientRect().height) * this.canvas.offsetHeight
-			width = (((westHandle.getBoundingClientRect().width * 2) + revealed.getBoundingClientRect().width) / this.canvas.getBoundingClientRect().width) * this.canvas.offsetWidth
-			height = (((northHandle.getBoundingClientRect().height * 2) + revealed.getBoundingClientRect().height) / this.canvas.getBoundingClientRect().height) * this.canvas.offsetHeight
-
-			ctx.drawImage(
-				this.canvas,
-				x,
-				y,
-				width,
-				height,
-				0, 0, w, h
-			)
-			return ctx.canvas
 		}
 
 		takeScreenshot() {
-			return new Promise((resolve) => {
+			return new Promise((resolve, reject) => {
 				var type = "image/jpeg"
 				var quality = 0.92
-				var scaledWidth = 2000
+				var scaledWidth = 1500
 				var parent = this.container.parentElement.parentElement.parentElement
 				var renderer = this._data.instance.renderer
 
@@ -418,42 +511,26 @@
 					renderer.resize()
 
 					setTimeout(() => {
+						var screenshotCanvas = this.screenshotCanvas()
 
-						var getscreenshot = ()=>{
-							var screenshotCanvas = this.screenshotCanvas()
-							var pixels = screenshotCanvas.getContext("2d").getImageData(0, 0, screenshotCanvas.width, screenshotCanvas.height).data
-							var isNotBlank = false
-
-							for (var i = 0, n = pixels.length; i < n; i += 4) {
-								if(pixels[i] !== 0 || pixels[i+1] !== 0 || pixels[i+2] !== 0){
-									if(pixels[i+3] !== 0){
-										isNotBlank = true
-										break
-									}
-								}
-							}
-
-							if(!isNotBlank){
-								return getscreenshot()
-							}
-
-							return screenshotCanvas.toBlob((file) => {
-
-								setTimeout(() => {
-									parent.style.removeProperty("opacity")
-									parent.style.removeProperty("min-width")
-									parent.style.removeProperty("max-width")
-									parent.style.removeProperty("height")
-									renderer.resize()
-	
-									return resolve(file)
-								}, 10);
-	
-							}, type, quality)
+						if (!screenshotCanvas) {
+							return reject()
 						}
 
-						getscreenshot()
-						
+						return screenshotCanvas.toBlob((file) => {
+
+							setTimeout(() => {
+								parent.style.removeProperty("opacity")
+								parent.style.removeProperty("min-width")
+								parent.style.removeProperty("max-width")
+								parent.style.removeProperty("height")
+								renderer.resize()
+
+								return resolve(file)
+							}, 10);
+
+						}, type, quality)
+
 					}, 10);
 				}, 10);
 

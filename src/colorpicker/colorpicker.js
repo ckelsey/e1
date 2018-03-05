@@ -60,13 +60,17 @@ class Colorpicker {
         })
 
         cancelButton.addEventListener("click", ()=>{
-            console.log("cancel", E1.setModel(null, `@ColorPickerService.pickers.${this.picker.name}.modal.active`, false))
+            E1.setModel(null, `@ColorPickerService.pickers.${this.picker.name}.modal.active`, false)
             
         })
 
         input.addEventListener("click", () => {
             input.blur()
             E1.setModel(null, `@ColorPickerService.pickers.${this.picker.name}.modal.active`, true)
+            
+            setTimeout(()=>{
+                E1.setModel(null, `@ColorPickerService.pickers.${this.picker.name}.values`, this.picker.values)
+            }, 10)
         })
 
         var handleInput = (modalInput)=>{
@@ -75,7 +79,7 @@ class Colorpicker {
                 var val = e.target.value
                 var str = ""
 
-                if (key === "hex" && (!val || E1.services.ColorPickerService.validHex(val).length < 7)) {
+                if (key === "hex" && (!val || val.length < 7)) {
                     return
                 }
 

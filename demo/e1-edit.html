@@ -1,0 +1,26 @@
+<h2>e1-edit</h2>
+<p>Adds buttons to turn on and off contenteditable on an element, allowing inline editing.</p>
+<p>&nbsp;</p>
+<h2>Demo</h2>
+<p demo-el><e1-edit content="@demoService.edit.text" save="@demoService.edit.save"></e1-edit> Click the edit button.</p>
+
+<p>&nbsp;</p>
+<div class="box">
+    <h3>Markup</h3>
+    <pre><code></code></pre>
+    <p>&nbsp;</p>
+    <h3>Attributes</h3>
+    <div>
+        <label>content
+            <small>- string. The text content to go into the element. Can not be HTML.</small>
+        </label>
+        <input type="text" e1-value="@demoService.edit.text" />
+    </div>
+    <p>&nbsp;</p>
+    <div style="margin-top: 21px;">
+        <label>save
+            <small>- function. The function to call when the save button is clicked</small>
+        </label>
+        <textarea e1-value="@demoService.edit.save"></textarea>
+    </div>
+</div>

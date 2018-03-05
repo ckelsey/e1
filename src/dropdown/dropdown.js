@@ -21,25 +21,6 @@ class Dropdown {
 		this.el.appendChild(container)
 
 		var clickThrottle = false
-
-		window.document.body.addEventListener("click", (e) => {
-			clearTimeout(clickThrottle)
-			var target = e.path ? e.path[0] : e.originalTarget ? e.originalTarget : e.target
-
-			clickThrottle = setTimeout(() => {
-				var container = this.el.querySelector(".dropdown-container")
-
-				try {
-					if (target === this.el.querySelector(".dropdown-list-label")) {
-						container.classList.toggle("mouseenter")
-					} else if (target !== this.el && !this.el.contains(target)) {
-						container.classList.remove("mouseenter")
-					}
-				} catch (e) { }
-
-			}, 10)
-		})
-
 		var leaveTimer
 
 		var mouseenter = () => {
@@ -58,6 +39,24 @@ class Dropdown {
 					this.el.querySelector(".dropdown-container").classList.remove("mouseenter")
 				}, 380)
 			})
+		} else {
+			window.document.body.addEventListener("click", (e) => {
+				clearTimeout(clickThrottle)
+				var target = e.path ? e.path[0] : e.originalTarget ? e.originalTarget : e.target
+
+				clickThrottle = setTimeout(() => {
+					var container = this.el.querySelector(".dropdown-container")
+
+					try {
+						if (target === this.el.querySelector(".dropdown-list-label")) {
+							container.classList.toggle("mouseenter")
+						} else if (target !== this.el && !this.el.contains(target)) {
+							container.classList.remove("mouseenter")
+						}
+					} catch (e) { }
+
+				}, 10)
+			})
 		}
 	}
 
@@ -69,6 +68,8 @@ class Dropdown {
 
 		if (this.list && this.list.length) {
 			labelElement.classList.add("has-options")
+		} else {
+			labelElement.classList.remove("has-options")
 		}
 
 		return labelElement
@@ -96,6 +97,12 @@ class Dropdown {
 						if (container.classList.contains("mouseenter")) {
 							if (this.el.optionClicked && typeof this.el.optionClicked === "function") {
 								this.el.optionClicked(e, optionWrapper)
+							}
+
+							var optionClicked = E1.getModel(this.el, "option-clicked")
+
+							if (optionClicked && typeof optionClicked === "function") {
+								optionClicked(e, optionWrapper)
 							}
 
 							window.requestAnimationFrame(() => {
@@ -136,10 +143,8 @@ class Dropdown {
 			container.replaceChild(this.getOptions(), container.querySelector(".dropdown-list-options"))
 		}
 
-		if (label !== this.label) {
-			this.label = label
-			container.replaceChild(this.getLabel(), container.querySelector(".dropdown-list-label"))
-		}
+		this.label = label
+		container.replaceChild(this.getLabel(), container.querySelector(".dropdown-list-label"))
 	}
 }
 

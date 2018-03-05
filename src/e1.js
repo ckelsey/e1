@@ -47,20 +47,20 @@ class E1 {
 
 
 					if (elements.length) {
-					
+
 						for (var j = 0; j < elements.length; j++) {
 							this.components[componentName]._initElement(elements[j])
 						}
 					}
 				}
 
-				var loopComponents = (node)=>{
+				var loopComponents = (node) => {
 					components.forEach((componentName) => {
 						initElement(node, componentName)
 					})
 				}
 
-				var loopAddedNodes = (addedNodes)=>{
+				var loopAddedNodes = (addedNodes) => {
 					for (var i = 0; i < addedNodes.length; i++) {
 						if (addedNodes[i].nodeType !== 3) {
 							loopComponents(addedNodes[i])
@@ -218,27 +218,31 @@ class E1 {
 
 		// Sorting so longest paths first
 		// Needed for similar path names
-		values.sort(function(a,b){
+		values.sort(function (a, b) {
 			return a.length > b.length ? -1 : a.length < b.length ? 1 : 0
 		})
 
 		values.forEach(v => {
-			if(v.substring(0,1) === "@"){
+			if (v.substring(0, 1) === "@") {
 				var model = this.getModel(null, v)
 
-				if(isNaN(model)){
+				if (isNaN(model)) {
 					expression = expression.split(v).join("'" + model + "'")
-				}else{
+				} else {
 					expression = expression.split(v).join(model)
 				}
 			}
 		})
 
+		return this.eval(expression)
+	}
+
+	eval(expression) {
 		vm.createContext()
-		
-		try{
+
+		try {
 			return vm.runInNewContext(expression)
-		}catch(e){
+		} catch (e) {
 			return false
 		}
 	}
@@ -330,7 +334,7 @@ class E1 {
 
 		var attributes = el.attributes
 
-		var handleBindings = (bindings, _el)=>{
+		var handleBindings = (bindings, _el) => {
 			bindings.forEach(binding => {
 				var conditionalBinding = binding.split(/\?|\:/g).map(b => { return b.trim() })[0]
 
@@ -405,7 +409,7 @@ class E1 {
 
 		try { clone = JSON.parse(JSON.stringify(clone)) } catch (e) { }
 
-		if(value.substring && value.substring(0,1) === "@"){
+		if (value.substring && value.substring(0, 1) === "@") {
 			value = this.getModel(null, value, value)
 		}
 
@@ -477,8 +481,6 @@ class E1 {
 			})
 		}
 
-
-
 		if (elements && elements.length) {
 			elements.forEach(element => {
 				var isShown = window.document.body.contains(element)
@@ -506,6 +508,7 @@ class E1 {
 }
 
 window.E1 = new E1()
+
 module.exports = window.E1
 
 if (window.document.readyState === "complete") {

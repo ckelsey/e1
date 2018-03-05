@@ -23,12 +23,12 @@ class ColorSSlider {
 
             this.picker.values[this.key] = val
 
-            if(["h", "s", "l"].indexOf(this.key) > -1){
+            if (["h", "s", "l"].indexOf(this.key) > -1) {
                 this.picker.values = E1.services.ColorPickerService.convert(`hsla(${this.picker.values.h}, ${this.picker.values.s}, ${this.picker.values.l}, ${this.picker.values.a})`)
-            }else{
+            } else {
                 this.picker.values = E1.services.ColorPickerService.convert(`rgba(${this.picker.values.r}, ${this.picker.values.g}, ${this.picker.values.b}, ${this.picker.values.a})`)
             }
-            
+
             E1.setModel(null, `@ColorPickerService.pickers.${this.picker.name}`, this.picker)
         }
 
@@ -46,6 +46,10 @@ class ColorSSlider {
             window.document.addEventListener("mousemove", mouseMove)
         })
 
+        this.el.addEventListener("mouseleave", () => {
+            clear()
+        })
+
         window.document.addEventListener("mouseup", () => {
             clear()
         })
@@ -54,11 +58,11 @@ class ColorSSlider {
             clear()
         })
 
-        E1.subscribe(`@ColorPickerService.pickers.${this.picker.name}.values`, ()=>{
+        E1.subscribe(`@ColorPickerService.pickers.${this.picker.name}.values`, () => {
             this.update()
         })
 
-        window.requestAnimationFrame(()=>{
+        window.requestAnimationFrame(() => {
             this.update()
         })
     }
@@ -72,9 +76,9 @@ class ColorSSlider {
 
         var rangeBg
 
-        if(this.key === "a"){
+        if (this.key === "a") {
             rangeBg = `linear-gradient(to right, hsla(${this.picker.values.h}, ${this.picker.values.s}%, ${this.picker.values.l}%, 0), hsla(${this.picker.values.h}, ${this.picker.values.s}%, ${this.picker.values.l}%, 1) 100%)`
-        }else{
+        } else {
             rangeBg = `linear-gradient(to right, hsl(${this.picker.values.h}, 0%, ${this.picker.values.l}%), hsl(${this.picker.values.h}, 100%, ${this.picker.values.l}%) 100%)`
         }
 

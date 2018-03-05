@@ -1,0 +1,19 @@
+<h2>e1-progress</h2>
+<p></p>
+<p>&nbsp;</p>
+<h2>Markup</h2>
+<pre><code></code></pre>
+<p>&nbsp;</p>
+<h2>Demo</h2>
+<label>Progress</label>
+<input type="number" e1-value="@demoService.progress.amount">
+<p></p>
+<label>Type</label>
+<e1-select options="@demoService.progress.types" value="@demoService.progress.type" onselected="@demoService.progress.change"></e1-select>
+
+<p>&nbsp;</p>
+<div style="display:flex;justify-content: center">
+    <div demo-el e1-style="@demoService.progress.width:width">
+        <e1-progress progress="@demoService.progress.amount" type="@demoService.progress.type.value"></e1-progress>
+    </div>
+</div>

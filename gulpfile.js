@@ -19,47 +19,47 @@ var config = require('./webpack.config.js');
 var compiler = webpack(config);
 
 var paths = {
-	watch: ["./src/*,", "./src/**/*", "./demo/*"],
+	watch: ["./src/*,", "./src/**/*", "./demo/*", "./e2e/*"],
 	jshint: ["src/*.js,", "src/**/*.js"]
 }
 
-gulp.task('webpack', function(done){
+gulp.task('webpack', function (done) {
 	compiler.run(onBuild(done));
 });
 
 function onBuild(done) {
-    return function(err, stats) {
-		
+	return function (err, stats) {
+
 		if (err) {
-		   
+
 			gutil.log('Error', err);
-			
+
 			if (done) {
-                done();
+				done();
 			}
-			
-        } else {
-            Object.keys(stats.compilation.assets).forEach(function(key) {
-                gutil.log('Webpack: output ', gutil.colors.green(key));
-            });
-			
+
+		} else {
+			Object.keys(stats.compilation.assets).forEach(function (key) {
+				gutil.log('Webpack: output ', gutil.colors.green(key));
+			});
+
 			gutil.log('Webpack: ', gutil.colors.blue('finished ', stats.compilation.name));
-			
+
 			if (done) {
-                done();
-            }
-        }
-    }
+				done();
+			}
+		}
+	}
 }
 
 
 
 
 
-gulp.task('jshint', function() {
-    return gulp.src(paths.jshint)
-        .pipe(jshint())
-        .pipe(jshint.reporter('default'));
+gulp.task('jshint', function () {
+	return gulp.src(paths.jshint)
+		.pipe(jshint())
+		.pipe(jshint.reporter('default'));
 });
 
 
@@ -72,7 +72,7 @@ var babelPlugins = [
 	require('babel-plugin-transform-es2015-modules-commonjs'),
 ]
 
-var demoServiceOptions = assign({}, watchify.args,{
+var demoServiceOptions = assign({}, watchify.args, {
 	entries: ['./demo/index.js']
 });
 
@@ -100,6 +100,34 @@ function bundleDemoService() {
 
 
 
+var e2eOptions = assign({}, watchify.args, {
+	entries: ['./e2e/index.js']
+});
+
+var e2e = watchify(browserify(e2eOptions)
+	.transform(stringify, { minify: true })
+	.transform(require('babelify'), {
+		presets: [require('babel-preset-env')],
+		plugins: babelPlugins
+	})
+);
+
+gulp.task('e2e', bundleE2e);
+e2e.on('update', bundleE2e);
+e2e.on('log', plugins.util.log);
+
+function bundleE2e() {
+	return e2e.bundle()
+		.on('error', plugins.util.log.bind(plugins.util, 'Browserify Error'))
+		.pipe(source('e2e.js'))
+		.pipe(buffer())
+		.pipe(plugins.uglifyEs.default())
+		.pipe(gulp.dest('./docs'))
+		.on('end', function () { plugins.util.log('Done!'); });
+}
+
+
+
 
 
 gulp.task('server', function () {
@@ -115,16 +143,19 @@ gulp.task('server', function () {
 const docs = [
 	"./demo/*.html",
 	"./demo/*.css",
+	"./demo/*.png",
+	"./demo/*.jpg",
 	"./demo/prism.js",
-	"./dist/*"
+	"./dist/*",
+	// "./e2e/*"
 ]
 
 gulp.task('moveDocs', function () {
 	return gulp.src(docs).pipe(gulp.dest('./docs'))
 });
 
-gulp.task("dev", ["webpack", "server", "jshint", "moveDocs", "demoService"], function() {
-	gulp.watch(paths.watch, ["webpack", "jshint", "moveDocs", "demoService"]);
+gulp.task("dev", ["webpack", "server", "jshint", "moveDocs", "demoService", "e2e"], function () {
+	gulp.watch(paths.watch, ["webpack", "jshint", "moveDocs", "demoService", "e2e"]);
 });
 
 gulp.task("default", [

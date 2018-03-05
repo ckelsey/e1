@@ -11,7 +11,7 @@
 
 			this.destroy = () => {
 				window.removeEventListener("resize", resize, false)
-				window.onorientationchange = null
+				// window.onorientationchange = null
 
 				if (this.canvasWrapper) {
 					this.canvasWrapper.innerHTML = ""
@@ -68,7 +68,7 @@
 				this.run()
 
 				window.addEventListener("resize", resize, false)
-				window.onorientationchange = resize
+				// window.onorientationchange = resize
 			})
 		}
 
@@ -277,22 +277,22 @@
 			}
 
 			var mouseUp = () => {
-				window.document.removeEventListener("mousemove", mouseMove, false)
-				window.document.removeEventListener("mouseleave", mouseUp, false)
-				window.document.removeEventListener("mouseup", mouseUp, false)
+				self.canvas.removeEventListener("mousemove", mouseMove, false)
+				window.document.body.removeEventListener("mouseleave", mouseUp, false)
+				window.document.body.removeEventListener("mouseup", mouseUp, false)
 
-				window.document.removeEventListener("touchmove", mouseMove, false)
-				window.document.removeEventListener("touchend", mouseUp, false)
-				window.document.removeEventListener("touchcancel", mouseUp, false)
+				self.canvas.removeEventListener("touchmove", mouseMove, false)
+				window.document.body.removeEventListener("touchend", mouseUp, false)
+				window.document.body.removeEventListener("touchcancel", mouseUp, false)
 			}
 
-			window.document.addEventListener("mousemove", mouseMove, false)
-			window.document.addEventListener("mouseleave", mouseUp, false)
-			window.document.addEventListener("mouseup", mouseUp, false)
+			self.canvas.addEventListener("mousemove", mouseMove, false)
+			window.document.body.addEventListener("mouseleave", mouseUp, false)
+			window.document.body.addEventListener("mouseup", mouseUp, false)
 
-			window.document.addEventListener("touchmove", mouseMove, false)
-			window.document.addEventListener("touchend", mouseUp, false)
-			window.document.addEventListener("touchcancel", mouseUp, false)
+			self.canvas.addEventListener("touchmove", mouseMove, false)
+			window.document.body.addEventListener("touchend", mouseUp, false)
+			window.document.body.addEventListener("touchcancel", mouseUp, false)
 		}
 
 		setBounds() {

@@ -1,0 +1,45 @@
+e1-progress{
+
+}
+
+e1-progress .circle-container{
+    width: 100%;
+    padding-top: 100%;
+    position: relative;
+}
+
+e1-progress .circle-inner{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    border-radius: 50%;
+    background: rgba(202, 202, 202, 0.03);
+    overflow: hidden;
+}
+
+e1-progress .circle-inner svg{
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+e1-progress .circle-inner svg ellipse{
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 42px;
+}
+
+e1-progress .progress-bar-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+e1-progress .progress-bar{
+    height: 5px;
+    background: #fff;
+    margin-top: 7px;
+}

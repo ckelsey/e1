@@ -4,8 +4,14 @@
 
 <h2>Demo</h2>
 <div demo-el>
-    <e1-dropdown list="@demoService.dropdown.list" label="@demoService.dropdown.label"></e1-dropdown>
+    <e1-dropdown list="@demoService.dropdown.list" label="@demoService.dropdown.label" option-clicked="@demoService.dropdown.optionClicked"></e1-dropdown>
 </div>
+<p>&nbsp;</p>
+<p>Text bound to the option clicked:
+    <span e1-content="@demoService.dropdown.selected"></span>
+</p>
+
+<p>&nbsp;</p>
 <div class="box">
     <h3>Markup</h3>
     <pre><code></code></pre>
@@ -23,5 +29,12 @@
             <small>- can be an array or comma separated string. If empty, the label will not display an arrow.</small>
         </label>
         <textarea e1-value="@demoService.dropdown.list"></textarea>
+    </div>
+    <p>&nbsp;</p>
+    <div style="margin-top: 21px;">
+        <label>option-clicked
+            <small>- function. A function to call when a list option is clicked.</small>
+        </label>
+        <textarea e1-value="@demoService.dropdown.optionClicked"></textarea>
     </div>
 </div>

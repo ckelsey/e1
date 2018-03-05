@@ -5,38 +5,34 @@ class AccordianToggle {
         this.setup()
     }
 
-    setup(){
+    setup() {
         var group = this.el.getAttribute("e1-accordian-toggle-group")
 
-        this.el.addEventListener("click", ()=>{
-            var contentSection = window.document.querySelector('[e1-accordian-toggle-group="'+group+'"][e1-accordian-content="'+this.el.getAttribute("e1-accordian-toggle")+'"]')
-            var activeTab = window.document.querySelector('[e1-accordian-toggle-group="'+group+'"][e1-accordian-toggle].active-accordian')
-            var activeContent = window.document.querySelector('[e1-accordian-toggle-group="'+group+'"][e1-accordian-content].active-accordian')
-            
-            if(contentSection){
-                // contentSection.style.overflow = "hidden"
-                // contentSection.style.maxHeight = contentSection.getBoundingClientRect().height + "px"
+        this.el.addEventListener("mouseup", () => {
+            var contentSection = window.document.querySelector('[e1-accordian-toggle-group="' + group + '"][e1-accordian-content="' + this.el.getAttribute("e1-accordian-toggle") + '"]')
+            var activeTab = window.document.querySelector('[e1-accordian-toggle-group="' + group + '"][e1-accordian-toggle].active-accordian')
+            var activeContent = window.document.querySelector('[e1-accordian-toggle-group="' + group + '"][e1-accordian-content].active-accordian')
+
+            if (contentSection) {
                 contentSection.classList.add("active-accordian")
                 this.el.classList.add("active-accordian")
 
-                setTimeout(()=>{
+                setTimeout(() => {
                     contentSection.style.removeProperty("max-height")
                 }, 3000)
 
-                if(activeTab){
+                if (activeTab) {
                     activeTab.classList.remove("active-accordian")
                 }
 
-                if(activeContent){
+                if (activeContent) {
                     activeContent.classList.remove("active-accordian")
                 }
             }
         })
     }
 
-    update(){
-
-    }
+    update() { }
 }
 
 import E1 from "../e1"

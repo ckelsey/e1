@@ -1,0 +1,14 @@
+<div e1-repeat="@E1UiRecorderService.pageActions" delimiter="$key">
+    <div class="ui-action">
+        <div class="ui-action-info" onmouseenter="E1UiRecorderService.highlight($key)" onmouseleave="E1UiRecorderService.unhighlight()">
+            <span e1-content="@E1UiRecorderService.pageActions.$key.type"></span>
+            <span> - </span>
+            <span e1-content="@E1UiRecorderService.pageActions.$key.selector"></span>
+            <span> </span>
+            <span e1-content="@E1UiRecorderService.pageActions.$key.index"></span>
+        </div>
+        <div class="ui-delete-action" onclick="E1UiRecorderService.delete($key)">
+            <e1-icon type="delete"></e1-icon>
+        </div>
+    </div>
+</div>

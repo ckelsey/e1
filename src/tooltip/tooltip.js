@@ -8,6 +8,7 @@ class E1Tooltip {
     }
 
     open() {
+        
         this.el.classList.toggle("tooltip-active")
     }
 

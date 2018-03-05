@@ -5,9 +5,9 @@
 	<title>E1</title>
 	<link rel="stylesheet" href="/prism.css" />
 	<script src="prism.js"></script>
+	<link href="https://unpkg.com/mocha@4.0.1/mocha.css" rel="stylesheet" />
 	<link rel="stylesheet" href="/demo-styles.css" />
 	<link rel="stylesheet" href="/e1.css" />
-	<link rel="stylesheet" href="/nv-services.css" />
 </head>
 
 <body>
@@ -17,107 +17,23 @@
 		</h1>
 	</div>
 	<div id="container">
-		<div id="sidebar">
-			<div e1-accordian-toggle="todo" e1-accordian-toggle-group="main">Todo</div>
-
-			<div class="divider" e1-accordian-toggle="element-attributes" e1-accordian-toggle-group="sidebar">Element attributes</div>
-
-			<div class="sidebar-content" e1-accordian-content="element-attributes" e1-accordian-toggle-group="sidebar"></div>
-
-			<div class="divider" e1-accordian-toggle="custom-elements" e1-accordian-toggle-group="sidebar">Prebuilt elements</div>
-
-			<div class="sidebar-content" e1-accordian-content="custom-elements" e1-accordian-toggle-group="sidebar"></div>
+		<div id="nav">
+			<e1-dropdown label="Utility directives" list="@demoService.page.utilityDirectives"></e1-dropdown>
+			<e1-dropdown label="Prebuilt directives" list="@demoService.page.prebuiltDirectives"></e1-dropdown>
+			<!-- <div e1-accordian-toggle="tests" e1-accordian-toggle-group="main">Tests</div> -->
 		</div>
-		<div id="main"></div>
+		<div id="main-content"></div>
 	</div>
 
-	<script>
-		var attrs = [
-			"e1-attribute",
-			"e1-class",
-			"e1-content",
-			"e1-if",
-			"e1-proximity",
-			"e1-repeat",
-			"e1-show",
-			"e1-style",
-			"e1-value"
-		]
 
-		var elements = [
-			"e1-accordian-toggle",
-			"e1-colorpicker",
-			"e1-dropdown",
-			"e1-filter",
-			"e1-icon",
-			"e1-image-viewer",
-			"e1-message",
-			"e1-modal",
-			"e1-search",
-			"e1-social-buttons",
-			"e1-select",
-			"e1-short-number",
-			"e1-tooltip",
-			"e1-upload-zone"
-		]
-
-		var sidebarAttributes = window.document.querySelector('[e1-accordian-content="element-attributes"]')
-		var sidebarAttributesHtml = ""
-
-		attrs.forEach(function (attr) {
-			sidebarAttributesHtml += '<div e1-accordian-toggle="' + attr + '" e1-accordian-toggle-group="main">' + attr + '</div>'
-		})
-
-		sidebarAttributes.innerHTML = sidebarAttributesHtml
-
-		var sidebarElements = window.document.querySelector('[e1-accordian-content="custom-elements"]')
-		var sidebarElementsHtml = ""
-
-		elements.forEach(function (element) {
-			sidebarElementsHtml += '<div e1-accordian-toggle="' + element + '" e1-accordian-toggle-group="main">' + element + '</div>'
-		})
-
-		sidebarElements.innerHTML = sidebarElementsHtml
-
-		var mainSection = window.document.getElementById("main")
-		var allContent = attrs.concat(elements)
-		var mainHtml = ""
-
-		allContent.push("todo")
-
-		allContent.forEach(function (element) {
-			mainHtml += '<div e1-accordian-content="'+element+'" e1-accordian-toggle-group="main"></div>'
-		})
-
-		mainSection.innerHTML = mainHtml
-
-		var sections = window.document.querySelectorAll('[e1-accordian-toggle-group="main"][e1-accordian-content]')
-
-		sections.forEach(function (section) {
-
-			var req = new XMLHttpRequest()
-			req.open("GET", section.getAttribute("e1-accordian-content") + ".html")
-
-			req.addEventListener("load", function () {
-
-				section.innerHTML = "<div>" + this.responseText + "</div>"
-
-				var codeSection = section.querySelector("code")
-				var demoEl = section.querySelector("[demo-el]")
-
-
-				if (codeSection && demoEl) {
-					codeSection.innerHTML = Prism.highlight(demoEl.innerHTML.trim(), Prism.languages.html)
-				}
-			})
-			req.send()
-		})
-	</script>
-
+	<!-- <e1-ui-recorder></e1-ui-recorder> -->
 
 	<script src="e1.js"></script>
 	<script src="demo.js"></script>
-	<script src="nv-services.js"></script>
+
+	<script>
+		E1.services.demoService.init()
+	</script>
 </body>
 
 </html>

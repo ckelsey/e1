@@ -1,9 +1,9 @@
 import E1 from "../e1"
 
 class E1UploadZone {
-    constructor(el) {
-        this.el = el
-        this.update = this.update
+	constructor(el) {
+		this.el = el
+		this.update = this.update
 
 		this.el.appendChild(E1.cleanHtml([
 			'<div class="upload-wrapper">',
@@ -12,9 +12,9 @@ class E1UploadZone {
 			'</div>',
 			'<input class="file-input" type="file">',
 			'</div>',
-        ].join("")))
-        
-        function handleDrag(e) {
+		].join("")))
+
+		function handleDrag(e) {
 			e.preventDefault();
 			e.stopPropagation();
 		}
@@ -72,17 +72,17 @@ class E1UploadZone {
 			E1.setModel(el, el.getAttribute("file"), "")
 			el.querySelector("input.file-input").value = null
 		}
-    }
+	}
 
-    update() {
-        var content = E1.getModel(this.el, "content", "")
-        var inner = this.el.querySelector(".upload-wrapper-inner")
+	update() {
+		var content = E1.getModel(this.el, "content", "")
+		var inner = this.el.querySelector(".upload-wrapper-inner")
 
-        if(!inner){return}
+		if (!inner) { return }
 
-        inner.innerHTML = ""
-        inner.appendChild(E1.cleanHtml(`<div>${content}</div>`))
-    }
+		inner.innerHTML = ""
+		inner.appendChild(E1.cleanHtml(`<div>${content}</div>`))
+	}
 }
 
 E1.registerComponent("e1-upload-zone", E1UploadZone)

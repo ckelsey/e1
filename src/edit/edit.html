@@ -1,0 +1,9 @@
+<span class="edit-wrapper">
+    <span class="edit-content" e1-content="@E1EditService.editors.{{editor}}.value"></span>
+    <span class="edit-buttons">
+        <span e1-show="@E1EditService.editors.{{editor}}.editing !== true">
+            <e1-icon type="edit"></e1-icon>
+        </span>
+        <span e1-show="@E1EditService.editors.{{editor}}.editing === true"><e1-icon type="check"></e1-icon></span><span e1-show="@E1EditService.editors.{{editor}}.editing === true"><e1-icon type="close"></e1-icon></span>
+    </span>
+</span>

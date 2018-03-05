@@ -1,26 +1,49 @@
 class DemoService {
     constructor() {
+
+        this.edit = {
+            text: "This is some editable text",
+            save: (el) => {
+                console.log(el.textContent)
+            }
+        }
+        this.progress = {
+            amount: 10,
+            type: "circle",
+            types: ["circle", "bar"],
+            width: "50px",
+            change: (val) => {
+
+                if (val === "circle") {
+                    E1.setModel(null, "@demoService.progress.width", "50px")
+                } else {
+                    E1.setModel(null, "@demoService.progress.width", "100%")
+                }
+
+                E1.setModel(null, "@demoService.progress.type", val)
+            }
+        }
         this.proximity = [{
-            inProximity: ()=>{
+            inProximity: () => {
                 E1.setModel(null, "@demoService.proximity.0.isVisible", "true")
             },
-            outProximity: ()=>{
+            outProximity: () => {
                 E1.setModel(null, "@demoService.proximity.0.isVisible", "false")
             },
             isVisible: "false"
-        },{
-            inProximity: ()=>{
+        }, {
+            inProximity: () => {
                 E1.setModel(null, "@demoService.proximity.1.isVisible", "true")
             },
-            outProximity: ()=>{
+            outProximity: () => {
                 E1.setModel(null, "@demoService.proximity.1.isVisible", "false")
             },
             isVisible: "false"
-        },{
-            inProximity: ()=>{
+        }, {
+            inProximity: () => {
                 E1.setModel(null, "@demoService.proximity.2.isClose", "true")
             },
-            outProximity: ()=>{
+            outProximity: () => {
                 E1.setModel(null, "@demoService.proximity.2.isClose", "false")
             },
             isClose: "false"
@@ -91,7 +114,7 @@ class DemoService {
             options: [{
                 label: "Super resolution",
                 preview: "https://images.nvidia.com/ansel/images/ansel-images/Y2tsc3l0ZXN0ZXIyMTUwNzEyNjE4OTYzMjMzMTI1ODky_small.jpg",
-                url: "https://localhost:3004/small.jpg",
+                url: "https://images.nvidia.com/ansel/images/ansel-images/Y2tsc3l0ZXN0ZXIyMTUwNzEyNjE4OTYzMjMzMTI1ODky_large.jpg",
                 type: "Super resolution"
             }, {
                 label: "Screenshot",
@@ -231,10 +254,13 @@ class DemoService {
         this.dropdown = {
             label: "Hello dropdown",
             list: [
-                `<a onclick="alert('one')">One</a>`,
-                `<a onclick="alert('two')">Two</a>`,
-                `<a onclick="alert('three')">Three</a>`
-            ]
+                `<a style="display: block;" onclick="alert('one')">One</a>`,
+                `<a style="display: block;" onclick="alert('two')">Two</a>`,
+                `<a style="display: block;" onclick="alert('three')">Three</a>`
+            ],
+            optionClicked: function (e, opt) {
+                E1.setModel(null, "@demoService.dropdown.selected", opt.textContent)
+            }
         }
 
         this.select = {
@@ -283,10 +309,118 @@ class DemoService {
         this.ifVal5 = 5
         this.ifContent = '<span e1-test e1-content="<span>Outer value is true <span e1-if=\'@demoService.trueFalse4\'>, inner value is true</span></span>"></span>'
 
-        
+        this.collapse = {
+            target: "#collapse-target",
+            width: 600
+        }
+
+        this.page = {}
+
+        this.utilities = [
+            "e1-attribute",
+            "e1-class",
+            "e1-content",
+            "e1-if",
+            "e1-repeat",
+            "e1-show",
+            "e1-style",
+            "e1-value"
+        ]
+
+        this.elements = [
+            "e1-accordian-toggle",
+            "e1-collapse",
+            "e1-colorpicker",
+            "e1-dropdown",
+            "e1-edit",
+            // "e1-filter",
+            "e1-icon",
+            "e1-image-viewer",
+            "e1-message",
+            "e1-modal",
+            "e1-progress",
+            "e1-proximity",
+            "e1-search",
+            "e1-social-buttons",
+            "e1-select",
+            "e1-short-number",
+            "e1-tooltip",
+            "e1-upload-zone"
+        ]
+
+        this.init = () => {
+            this.page.utilityDirectives = []
+
+            this.utilities.forEach((utility) => {
+                this.page.utilityDirectives.push(`<div e1-accordian-toggle="${utility}" e1-accordian-toggle-group="main">${utility}</div>`)
+            })
+
+
+            this.page.prebuiltDirectives = []
+
+            this.elements.forEach((el) => {
+                this.page.prebuiltDirectives.push(`<div e1-accordian-toggle="${el}" e1-accordian-toggle-group="main">${el}</div>`)
+            })
+
+            E1.setModel(null, "@demoService.page", this.page)
+
+            var mainSection = window.document.getElementById("main-content")
+            var allContent = this.utilities.concat(this.elements)
+            var mainHtml = ""
+
+            allContent.push("todo")
+            allContent.push("tests")
+
+            allContent.forEach(function (element) {
+                mainHtml += `<div e1-accordian-content="${element}" e1-accordian-toggle-group="main"></div>`
+            })
+
+            mainSection.innerHTML = mainHtml
+
+            var sections = window.document.querySelectorAll('[e1-accordian-toggle-group="main"][e1-accordian-content]')
+
+            sections.forEach(function (section) {
+
+                var req = new XMLHttpRequest()
+                req.open("GET", section.getAttribute("e1-accordian-content") + ".html")
+
+                req.addEventListener("load", function () {
+
+                    section.innerHTML = "<div>" + this.responseText + "</div>"
+
+                    var codeSection = section.querySelectorAll("code")
+                    var demoEl = section.querySelectorAll("[demo-el]")
+
+                    for (var i = 0; i < demoEl.length; i++) {
+                        if (codeSection[i] && demoEl[i]) {
+                            codeSection[i].innerHTML = Prism.highlight(demoEl[i].innerHTML.split("&amp;&amp;").join("&&").trim(), Prism.languages.html)
+                        }
+                    }
+                })
+                req.send()
+            })
+        }
+
+        this.initTests = () => {
+
+            mocha.run()
+        }
+
+        this.initE2e = () => {
+
+            var file = window.location.search.split("?")[1].split("file=")[1].split("&")[0] + ".html"
+
+            var req = new XMLHttpRequest()
+            req.open("GET", file)
+
+            req.addEventListener("load", function () {
+
+                window.document.getElementById("main-content").innerHTML = "<div>" + this.responseText + "</div>"
+
+            })
+            req.send()
+        }
     }
-
-
 }
 
 window.E1.registerService("demoService", new DemoService())

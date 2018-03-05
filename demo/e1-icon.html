@@ -1,14 +1,28 @@
 <h2>e1-icon</h2>
-<p></p>
+<p>This element renders a svg icon. It's color is determined by it's color style.</p>
 <p>&nbsp;</p>
-<h2>Markup</h2>
-<pre><code></code></pre>
-<p>&nbsp;</p>
+
 <h2>Demo</h2>
-<p e1-attribute="@demoService.icon.styles:style" demo-el><e1-icon type="@demoService.icon.value.value" style="width: 50px;"></e1-icon></p>
+<p e1-style="@demoService.color:color" demo-el>
+    <e1-icon type="@demoService.icon.value.value" style="width: 50px;"></e1-icon>
+</p>
+
 <p>&nbsp;</p>
 <p>
-    <label>Styles</label>
-    <input type="text" e1-value="@demoService.icon.styles">
+    <label>Color</label>
+    <e1-colorpicker color="@demoService.color"></e1-colorpicker>
 </p>
-<p><e1-select options="@demoService.icon.options" value="@demoService.icon.value"></e1-select></p>
+
+<p>&nbsp;</p>
+<div class="box">
+    <h3>Markup</h3>
+    <pre><code></code></pre>
+    <p>&nbsp;</p>
+    <h3>Attributes</h3>
+    <div>
+        <label>type
+            <small>- string. The type of icon.</small>
+        </label>
+        <e1-select options="@demoService.icon.options" value="@demoService.icon.value"></e1-select>
+    </div>
+</div>

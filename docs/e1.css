@@ -330,7 +330,51 @@ upload-zone .file-input {
 
 .search .cancel-search-button::after {
 	transform: rotate(45deg);
-} */e1-modal .modal {
+} */e1-progress{
+
+}
+
+e1-progress .circle-container{
+    width: 100%;
+    padding-top: 100%;
+    position: relative;
+}
+
+e1-progress .circle-inner{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    border-radius: 50%;
+    background: rgba(202, 202, 202, 0.03);
+    overflow: hidden;
+}
+
+e1-progress .circle-inner svg{
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+e1-progress .circle-inner svg ellipse{
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 42px;
+}
+
+e1-progress .progress-bar-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+e1-progress .progress-bar{
+    height: 5px;
+    background: #fff;
+    margin-top: 7px;
+}e1-modal .modal {
 	position: fixed;
 	width: 100%;
 	height: 100%;
@@ -936,6 +980,41 @@ e1-icon *{
 	border-radius: 50%;
 	left: 10%;
 	top: 15%;
+}e1-edit .edit-wrapper{
+    display: inline-flex;
+    align-items: center;
+}
+
+e1-edit .edit-wrapper [contenteditable]{
+    outline: none !important;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+e1-edit .edit-buttons{
+    display: flex;
+    align-items: center;
+}
+
+e1-edit .edit-buttons span{
+    display: inline-block;
+}
+
+e1-edit .edit-buttons span e1-icon{
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    padding: 4px 6px;
+    background: rgba(255, 255, 255, 0.25);
+    margin: 0px 4px;
+}
+
+e1-edit .edit-buttons span e1-icon[type="check"]{
+    padding: 5px 6px;
+}
+
+e1-edit .edit-buttons span e1-icon[type="close"]{
+    padding: 3px 7px;
 }.dropdown-container {
 	position: relative;
 	box-sizing: border-box;
@@ -1467,6 +1546,41 @@ e1-color-slider[key="a"]{
         margin: 0px;
         max-width: 90%;
     }
+}e1-collapse{
+    display: block;
+    width: 100%;
+}
+
+e1-collapse [e1-collapse-toggle]{
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    transition: opacity .2s, transform .2s;
+}
+
+e1-collapse.collapse.open [e1-collapse-toggle]{
+    transform: rotate(180deg);
+}
+
+e1-collapse.collapse [e1-collapse-toggle]{
+    position: relative;
+    opacity: 1;
+    pointer-events: all;
+}
+
+e1-collapse.collapse [e1-collapse-content]{
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s;
+}
+
+e1-collapse.collapse.open [e1-collapse-content]{
+    opacity: 1;
+    pointer-events: all;
 }[e1-accordian-toggle]{
     padding: 7px 14px 7px 21px;
     display: inline-block;
@@ -1517,4 +1631,68 @@ e1-color-slider[key="a"]{
     opacity: 1;
     pointer-events: all;
     transform: none;
+}.ui-recorder-wrapper{
+    position: fixed;
+    bottom: 0px;
+    height: 21px;
+    width: 100%;
+    left: 0px;
+    z-index: 2;
+}
+
+.ui-recorder-inner{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ui-recorder-inner button{
+    height: 100%;
+    padding: 0px 14px;
+}
+
+.ui-edit-section{
+    position: fixed;
+    top: 0px;
+    width: 250px;
+    height: 100%;
+    left: 0px;
+    overflow: auto;
+    padding: 7px;
+    background: rgba(0,0,0,.25);
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.ui-edit-section.active{
+    opacity: 1;
+    pointer-events: all;
+}
+
+.ui-action{
+    background: rgba(167, 103, 44, 0.77);
+    border-top: 1px solid rgba(255, 255, 255, 0.13);
+    padding: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 7px 0px;
+}
+
+.ui-delete-action{
+    width: 14px;
+    cursor: pointer;
+    pointer-events: all;
+}
+
+.ui-action-info{
+    cursor: pointer;
+    pointer-events: all;
+}
+
+.ui-highlighter{
+    background: rgba(167, 103, 44, 0.77);
+    position: absolute;
+    pointer-events: none;
 }

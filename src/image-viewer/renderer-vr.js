@@ -28,15 +28,15 @@
 			this.canDoVR = false
 			this.is3D = data.type.toLowerCase().indexOf("stereo") > -1
 			this.canvasWrapper = data.element
-			
+
 			this.glAttribs = {
 				antialias: true,
 			};
-			
-			if(this.data.crop){
+
+			if (this.data.crop) {
 				this.glAttribs.preserveDrawingBuffer = true
 			}
-			
+
 			this.frameData = new window.VRFrameData();
 			this.vrDisplay = null
 			this.vrSceneFrame = null
@@ -54,7 +54,7 @@
 			this.gl = this.canvas.getContext("webgl", this.glAttribs);
 			this.isPresenting = false
 			this.normalSceneFrame = null
-			
+
 			this.resize = resize
 
 			this.hasLoadedControls = false
@@ -71,7 +71,7 @@
 		}
 
 		present(self) {
-			self.vrDisplay.requestPresent([{ source: self.canvas }]).then( () => {
+			self.vrDisplay.requestPresent([{ source: self.canvas }]).then(() => {
 				self.onPresent();
 			});
 		}
@@ -80,7 +80,7 @@
 			this.ctxTop.canvas.width = this.ctxBottom.canvas.width = 4096;
 			this.ctxTop.canvas.height = this.ctxBottom.canvas.height = 2048;
 
-			if(img.width > 4096){
+			if (img.width > 4096) {
 				var height = (img.height * (4096 / img.width))
 				var pCtx = window.document.createElement("canvas").getContext("2d")
 				pCtx.canvas.width = 4096
@@ -174,8 +174,8 @@
 			}
 
 			this.canvasWrapper.parentNode.classList.add("fullscreen")
-			
-			setTimeout( ()=> {
+
+			setTimeout(() => {
 				this.isPresenting = true;
 
 				this.positionCanvas(this);
@@ -192,6 +192,13 @@
 
 				this.drawVRScene();
 			}, 500);
+		}
+
+		fullscreen(e) {
+			this.data.instance.toggleFullscreen(e)
+			setTimeout(() => {
+				this.positionCanvas(this);
+			}, 200)
 		}
 
 		onNormalScene() {
@@ -249,6 +256,12 @@
 
 		}
 
+		onExitFullscreen(self) {
+			setTimeout(() => {
+				self.positionCanvas(self)
+			}, 200)
+		}
+
 		run() {
 			this.canvasWrapper.appendChild(this.canvas)
 			this.canvas.setAttribute("type", "vr")
@@ -261,6 +274,8 @@
 				this.originalImage = this.img1
 				this.onNormalScene()
 				this.data.instance.createControls({
+					fullscreen: this.fullscreen,
+					onExitFullscreen: this.onExitFullscreen,
 					vr: this.present,
 					self: this
 				})
@@ -277,6 +292,11 @@
 				this.originalImage = _img
 				this.setImages(_img);
 
+				this.canvasWrapper.parentNode.style.display = "block";
+				this.canvasWrapper.parentNode.style.height = "0px";
+				this.canvasWrapper.parentNode.style.width = "100%";
+				this.canvasWrapper.parentNode.style.paddingTop = ((9 / 16) * 100) + "%";
+
 				if (this.vrDisplay.isPresenting) {
 					this.onPresent()
 				} else {
@@ -292,6 +312,10 @@
 					this.ready = true
 				}
 			}, (_img) => {
+				this.canvasWrapper.parentNode.style.display = "block";
+				this.canvasWrapper.parentNode.style.height = "0px";
+				this.canvasWrapper.parentNode.style.width = "100%";
+				this.canvasWrapper.parentNode.style.paddingTop = ((9 / 16) * 100) + "%";
 				this.setImages(_img);
 				this.onNormalScene()
 			}, this.reject)

@@ -43,6 +43,10 @@ class E1ImageViewer {
                 return this.el.renderer.data.cropper.downloadScreenshot()
             }
 
+            this.el.download = () => {
+                return this.el.renderer.download()
+            }
+
             var hasScanned = false
 
             this.el.renderer.subscribe("statsUpdate", (stats) => {
@@ -57,7 +61,7 @@ class E1ImageViewer {
 
                         try {
                             return vm.runInNewContext(this.el.getAttribute("imageready"))
-                        } catch (e) {}
+                        } catch (e) { }
                     }
 
                     hasScanned = true

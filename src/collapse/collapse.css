@@ -1,0 +1,36 @@
+e1-collapse{
+    display: block;
+    width: 100%;
+}
+
+e1-collapse [e1-collapse-toggle]{
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    transition: opacity .2s, transform .2s;
+}
+
+e1-collapse.collapse.open [e1-collapse-toggle]{
+    transform: rotate(180deg);
+}
+
+e1-collapse.collapse [e1-collapse-toggle]{
+    position: relative;
+    opacity: 1;
+    pointer-events: all;
+}
+
+e1-collapse.collapse [e1-collapse-content]{
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s;
+}
+
+e1-collapse.collapse.open [e1-collapse-content]{
+    opacity: 1;
+    pointer-events: all;
+}

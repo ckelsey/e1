@@ -7,7 +7,7 @@ html{
 
 body{
     margin: 0px;
-    padding: 21px 42px;
+    padding: 0px;
 }
 
 body *{
@@ -15,9 +15,9 @@ body *{
 }
 
 h1{
-    border-bottom: 1px solid #272e35;
-    padding-bottom: 28px;
-    margin: 21px 0px 21px;
+    padding: 21px 0px;
+    margin: 0px;
+    color: #fff;
 }
 
 h1 small{
@@ -181,15 +181,15 @@ h2[e1-accordian-toggle]{
     padding: 14px 14px 14px 21px;
 }
 
-#container{
+/* #container{
     display: flex;
 }
 
 #sidebar{
     width: 200px;
-}
+} */
 
-#sidebar [e1-accordian-toggle-group]{
+/* #sidebar [e1-accordian-toggle-group]{
     width: 100%;
     background: transparent;
 }
@@ -213,6 +213,55 @@ h2[e1-accordian-toggle]{
 
 .active-accordian::before{
     border-left-color: #fff;
+} */
+
+#header{
+    padding: 21px;
+    background: #31889e;
+}
+
+#nav{
+    border-bottom: 1px solid rgb(23, 27, 31);
+    padding: 21px;
+    background: #2a343a;
+    border-top: 1px solid rgb(13, 38, 45);
+}
+
+#nav>*{
+    margin-left: 14px;
+}
+
+#nav>*:nth-child(1){
+    margin-left: 0px;
+}
+
+#nav [e1-accordian-toggle]{
+    padding: 7px 14px;
+}
+
+#nav [e1-accordian-toggle]:before{
+    display: none;
+}
+
+#nav .dropdown-list-option{
+    padding: 0px;
+}
+
+#nav>[e1-accordian-toggle] {
+    background: transparent;
+    padding: 0px;
+}
+
+#main-content{
+    padding: 28px 21px;
+}
+
+#main-content .section{
+    display: none;
+}
+
+#main-content .section.active{
+    display: block;
 }
 
 .token.attr-value{
@@ -225,4 +274,61 @@ h2[e1-accordian-toggle]{
 
 .token.tag{
     color: hsl(0, 0%, 56%);
+}
+
+#mocha{
+    position: relative;
+    margin: 0px;
+}
+
+#mocha h1{
+    margin-top: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    border-bottom: 1px solid #303435;
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+}
+
+ul#mocha-stats{
+    position: relative;
+    top: 0px;
+    right: 0px;
+    font-size: 14px;
+    color: inherit;
+    display: flex;
+    padding: 7px;
+    background: #36889e;
+}
+
+#mocha li::before{
+    display: none;
+}
+
+#mocha li.test:before{
+    display: inline-block;
+    margin: 0px;
+}
+
+#mocha-stats em {
+    color: inherit;
+}
+
+#mocha-stats .progress{
+    background: #fff;
+    display: inline-block;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: inset 0px 0px 0px 2px #36889e, 0px 0px 0px 2px #36889e;
+}
+
+#mocha .test a.replay{
+    color: #fff;
+    font-size: 25px;
+    opacity: 1;
+    background: #36889e;
+}
+
+#mocha .test a.replay{
+    display: none;
 }

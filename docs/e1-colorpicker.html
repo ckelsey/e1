@@ -1,8 +1,20 @@
 <h2>e1-colorpicker</h2>
-<p></p>
-<p>&nbsp;</p>
-<h2>Markup</h2>
-<pre><code></code></pre>
+<p>This element provides an input that when clicked opens a popup color picker.</p>
 <p>&nbsp;</p>
 <h2>Demo</h2>
-<p demo-el><e1-colorpicker color="@demoService.color"></e1-colorpicker></p>
+<p demo-el>
+    <e1-colorpicker color="@demoService.color"></e1-colorpicker>
+</p>
+<p>&nbsp;</p>
+<div class="box">
+    <h3>Markup</h3>
+    <pre><code></code></pre>
+    <p>&nbsp;</p>
+    <h3>Attributes</h3>
+    <div>
+        <label>color
+            <small>- string. Can be in hex, rgb, rgga, hsl, or hsla</small>
+        </label>
+        <input type="text" e1-value="@demoService.color" />
+    </div>
+</div>

@@ -7,7 +7,6 @@ class E1Message {
 
         this.el.innerHTML = require("./message.html")
 
-
         this.update()
     }
 
@@ -38,7 +37,7 @@ class E1Message {
             var buttonHtml = ""
 
             if (buttons && buttons.length) {
-                
+
 
                 buttons.forEach(function (element) {
                     buttonHtml += '<button onclick="' + element.click + '">' + element.text + '</button>'

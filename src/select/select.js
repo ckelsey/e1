@@ -18,7 +18,7 @@ class Select {
 		var selectContainer = el.querySelector(".select-container")
 		var clickThrottle = false
 
-		window.document.body.addEventListener("click", (e) => {
+		window.document.body.addEventListener("mousedown", (e) => {
 			clearTimeout(clickThrottle)
 
 			clickThrottle = setTimeout(() => {
@@ -155,7 +155,7 @@ class Select {
 
 				if (!(/iPad|iPhone|iPod|Android/.test(window.navigator.userAgent))) {
 
-					option.addEventListener("click", (e) => {
+					option.addEventListener("mousedown", (e) => {
 						clearTimeout(clickThrottle)
 
 						clickThrottle = setTimeout(() => {
