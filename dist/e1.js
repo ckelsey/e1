@@ -1220,30 +1220,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 class AccordianToggle {
   constructor(el) {
     this.el = el;
-    this.el["e1-accordian-toggle-onUpdate"] = this.update;
+    this.el[`e1-accordian-toggle-onUpdate`] = this.update;
     this.setup();
   }
 
   setup() {
-    var group = this.el.getAttribute("e1-accordian-toggle-group");
-    this.el.addEventListener("mouseup", () => {
-      var contentSection = window.document.querySelector('[e1-accordian-toggle-group="' + group + '"][e1-accordian-content="' + this.el.getAttribute("e1-accordian-toggle") + '"]');
-      var activeTab = window.document.querySelector('[e1-accordian-toggle-group="' + group + '"][e1-accordian-toggle].active-accordian');
-      var activeContent = window.document.querySelector('[e1-accordian-toggle-group="' + group + '"][e1-accordian-content].active-accordian');
+    var group = this.el.getAttribute(`e1-accordian-toggle-group`);
+    this.el.addEventListener(`mouseup`, () => {
+      var contentSection = window.document.querySelector(`[e1-accordian-toggle-group="${group}"][e1-accordian-content="${this.el.getAttribute(`e1-accordian-toggle`)}"]`);
+      var activeTab = window.document.querySelector(`[e1-accordian-toggle-group="${group}"][e1-accordian-toggle].active-accordian`);
+      var activeContent = window.document.querySelector(`[e1-accordian-toggle-group="${group}"][e1-accordian-content].active-accordian`);
 
       if (contentSection) {
-        contentSection.classList.add("active-accordian");
-        this.el.classList.add("active-accordian");
+        contentSection.classList.add(`active-accordian`);
+        this.el.classList.add(`active-accordian`);
         setTimeout(() => {
-          contentSection.style.removeProperty("max-height");
+          contentSection.style.removeProperty(`max-height`);
         }, 3000);
 
         if (activeTab) {
-          activeTab.classList.remove("active-accordian");
+          activeTab.classList.remove(`active-accordian`);
         }
 
         if (activeContent) {
-          activeContent.classList.remove("active-accordian");
+          activeContent.classList.remove(`active-accordian`);
         }
       }
     });
@@ -1254,7 +1254,7 @@ class AccordianToggle {
 }
 
 
-__WEBPACK_IMPORTED_MODULE_0__e1___default.a.registerAttribute("e1-accordian-toggle", AccordianToggle);
+__WEBPACK_IMPORTED_MODULE_0__e1___default.a.registerAttribute(`e1-accordian-toggle`, AccordianToggle);
 
 /***/ }),
 /* 13 */

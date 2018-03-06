@@ -200,7 +200,7 @@ class DemoService {
         this.tooltip = "Here's a tooltip"
         this.upload = {
             content: "An upload message. Drag files here or click to browse.",
-            validator: (file, el) => {
+            validator: (file) => {
                 if (file.type !== "image/jpeg") {
                     alert("Only jpegs are valid!")
                 }
