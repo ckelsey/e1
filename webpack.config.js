@@ -14,8 +14,8 @@ module.exports = {
         publicPath: "./",
         path: __dirname + "/dist",
         filename: "[name].js",
-        libraryExport: 'e1Lib',
-        library: "e1Lib"
+        libraryExport: 'umd',
+        // library: "e1Lib"
     },
     plugins: [
         new ExtractTextPlugin({ filename: '[name].css', disable: false, allChunks: true }),
