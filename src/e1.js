@@ -409,7 +409,7 @@ class E1 {
 
 		try { clone = JSON.parse(JSON.stringify(clone)) } catch (e) { }
 
-		if (value.substring && value.substring(0, 1) === "@") {
+		if (value && value.substring && value.substring(0, 1) === "@") {
 			value = this.getModel(null, value, value)
 		}
 

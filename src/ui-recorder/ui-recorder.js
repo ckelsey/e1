@@ -38,8 +38,8 @@ class UiRecorder {
 
         this.el.querySelector(".ui-play-button").addEventListener("mousedown", () => {
             this.recording = false
-            var playback = eval(this.getPageActions())
-            console.log(playback)
+            // var playback = eval(this.getPageActions())
+            // console.log(playback)
         })
 
         this.el.querySelector(".ui-edit-button").addEventListener("mousedown", () => {
@@ -133,7 +133,7 @@ class UiRecorder {
             highlighter.style.left = elBox.left + "px"
             highlighter.style.top = elBox.top + "px"
         })
-        E1.setModel(null, "@E1UiRecorderService.unhighlight", (index) => {
+        E1.setModel(null, "@E1UiRecorderService.unhighlight", () => {
             var highlighter = this.el.querySelector(".ui-highlighter")
             highlighter.style.width = "0px"
             highlighter.style.height = "0px"
@@ -150,7 +150,7 @@ class UiRecorder {
         var lastTime = this.pageActions[0].time
         var times = []
 
-        this.pageActions.forEach((action, actionIndex) => {
+        this.pageActions.forEach((action) => {
 
             if (action.type === "scroll") {
                 result += `setTimeout(function(){
@@ -177,9 +177,9 @@ class UiRecorder {
             lastType = action.type
             lastEl = action.el
 
-            var type = action.evt instanceof MouseEvent ? "MouseEvent" :
-                action.evt instanceof KeyboardEvent ? "KeyboardEvent" :
-                    action.evt instanceof WheelEvent ? "WheelEvent" :
+            var type = action.evt instanceof window.MouseEvent ? "MouseEvent" :
+                action.evt instanceof window.KeyboardEvent ? "KeyboardEvent" :
+                    action.evt instanceof window.WheelEvent ? "WheelEvent" :
                         "Event"
 
             var evtType = action.type === "mouseover" ? "mouseenter" : action.type === "mouseout" ? "mouseleave" : action.type
@@ -214,15 +214,15 @@ class UiRecorder {
 
     export() {
         var playback = this.getPageActions()
-        var file = new Blob([playback], { type: "text/javascript" })
-        var a = document.createElement("a"),
-            url = URL.createObjectURL(file);
+        var file = new window.Blob([playback], { type: "text/javascript" })
+        var a = window.document.createElement("a"),
+            url = window.URL.createObjectURL(file);
         a.href = url;
         a.download = "test.js";
-        document.body.appendChild(a);
+        window.document.body.appendChild(a);
         a.click();
         setTimeout(function () {
-            document.body.removeChild(a);
+            window.document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
         }, 0);
     }

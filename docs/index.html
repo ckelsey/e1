@@ -3,11 +3,11 @@
 
 <head>
 	<title>E1</title>
-	<link rel="stylesheet" href="/prism.css" />
+	<link rel="stylesheet" href="prism.css" />
 	<script src="prism.js"></script>
-	<link href="https://unpkg.com/mocha@4.0.1/mocha.css" rel="stylesheet" />
-	<link rel="stylesheet" href="/demo-styles.css" />
-	<link rel="stylesheet" href="/e1.css" />
+	<!-- <link href="https://unpkg.com/mocha@4.0.1/mocha.css" rel="stylesheet" /> -->
+	<link rel="stylesheet" href="demo-styles.css" />
+	<link rel="stylesheet" href="e1.css" />
 </head>
 
 <body>
@@ -34,6 +34,17 @@
 	<script>
 		E1.services.demoService.init()
 	</script>
+
+	<script>
+		E1.setModel(null, "@TranslationService.serviceUrl", "https://translate.cklsylabs.com")
+		E1.setModel(null, "@TranslationService.locales", [
+			"en",
+			"ru",
+			"de",
+			"zh-CN"
+		])
+	</script>
+
 </body>
 
 </html>

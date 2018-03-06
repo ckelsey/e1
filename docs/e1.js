@@ -462,7 +462,7 @@ class E1 {
       clone = JSON.parse(JSON.stringify(clone));
     } catch (e) {}
 
-    if (value.substring && value.substring(0, 1) === "@") {
+    if (value && value.substring && value.substring(0, 1) === "@") {
       value = this.getModel(null, value, value);
     }
 
@@ -914,7 +914,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__social_buttons___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_24__social_buttons__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__tooltip__ = __webpack_require__(86);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__tooltip___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_25__tooltip__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__upload_zone__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__translate__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__upload_zone__ = __webpack_require__(91);
+
 
 
 
@@ -979,9 +981,8 @@ class UiRecorder {
       this.recording = false;
     });
     this.el.querySelector(".ui-play-button").addEventListener("mousedown", () => {
-      this.recording = false;
-      var playback = eval(this.getPageActions());
-      console.log(playback);
+      this.recording = false; // var playback = eval(this.getPageActions())
+      // console.log(playback)
     });
     this.el.querySelector(".ui-edit-button").addEventListener("mousedown", () => {
       this.recording = false;
@@ -1069,7 +1070,7 @@ class UiRecorder {
       highlighter.style.left = elBox.left + "px";
       highlighter.style.top = elBox.top + "px";
     });
-    __WEBPACK_IMPORTED_MODULE_0__e1___default.a.setModel(null, "@E1UiRecorderService.unhighlight", index => {
+    __WEBPACK_IMPORTED_MODULE_0__e1___default.a.setModel(null, "@E1UiRecorderService.unhighlight", () => {
       var highlighter = this.el.querySelector(".ui-highlighter");
       highlighter.style.width = "0px";
       highlighter.style.height = "0px";
@@ -1084,7 +1085,7 @@ class UiRecorder {
     var lastEl = null;
     var lastTime = this.pageActions[0].time;
     var times = [];
-    this.pageActions.forEach((action, actionIndex) => {
+    this.pageActions.forEach(action => {
       if (action.type === "scroll") {
         result += `setTimeout(function(){
                     window.scrollTo(${action.scrollPosition.x}, ${action.scrollPosition.y});
@@ -1109,7 +1110,7 @@ class UiRecorder {
       lastTime = action.time;
       lastType = action.type;
       lastEl = action.el;
-      var type = action.evt instanceof MouseEvent ? "MouseEvent" : action.evt instanceof KeyboardEvent ? "KeyboardEvent" : action.evt instanceof WheelEvent ? "WheelEvent" : "Event";
+      var type = action.evt instanceof window.MouseEvent ? "MouseEvent" : action.evt instanceof window.KeyboardEvent ? "KeyboardEvent" : action.evt instanceof window.WheelEvent ? "WheelEvent" : "Event";
       var evtType = action.type === "mouseover" ? "mouseenter" : action.type === "mouseout" ? "mouseleave" : action.type;
       result += `setTimeout(function(){
                 evt = new ${type}( "${evtType}", {
@@ -1139,17 +1140,17 @@ class UiRecorder {
 
   export() {
     var playback = this.getPageActions();
-    var file = new Blob([playback], {
+    var file = new window.Blob([playback], {
       type: "text/javascript"
     });
-    var a = document.createElement("a"),
-        url = URL.createObjectURL(file);
+    var a = window.document.createElement("a"),
+        url = window.URL.createObjectURL(file);
     a.href = url;
     a.download = "test.js";
-    document.body.appendChild(a);
+    window.document.body.appendChild(a);
     a.click();
     setTimeout(function () {
-      document.body.removeChild(a);
+      window.document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
     }, 0);
   }
@@ -5624,14 +5625,189 @@ E1.registerAttribute("e1-tooltip", E1Tooltip);
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__upload_zone__ = __webpack_require__(90);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__upload_zone_css__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__translate__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__translate___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__translate__);
+
+
+/***/ }),
+/* 90 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const E1 = __webpack_require__(0);
+
+class TranslationService {
+  constructor() {
+    this.strings = {};
+    this.locale = "en";
+    this.locales = ["en"];
+    this.serviceUrl = null;
+    var fetchTimer = null;
+    var lastUpdate = null;
+    E1.subscribe("@TranslationService.locale", res => {
+      for (var s in this.strings) {
+        if (this.strings[s]) {
+          this.strings[s].default = this.strings[s][res];
+        }
+      }
+
+      E1.setModel(null, `@TranslationService.strings`, this.strings);
+      window.localStorage.setItem("e1Locale", res);
+    });
+    E1.subscribe("@TranslationService.strings", () => {
+      clearTimeout(fetchTimer);
+      fetchTimer = setTimeout(() => {
+        if (lastUpdate && new Date().getTime() - lastUpdate < 1000) {
+          return;
+        }
+
+        this.updateTranslations();
+      }, 1000);
+    });
+
+    if (window.localStorage.getItem("e1Locale")) {
+      this.locale = window.localStorage.getItem("e1Locale");
+    }
+
+    if (window.localStorage.getItem("e1Translations")) {
+      var data = JSON.parse(window.localStorage.getItem("e1Translations"));
+
+      if (new Date().getTime() < data.expires) {
+        this.strings = data.strings;
+      }
+    }
+  }
+
+  get(key) {
+    return E1.getThis(E1.services.TranslationService.strings, `${key}.${this.locale}`, key);
+  }
+
+  getTranslation(key, code) {
+    return new Promise((resolve, reject) => {
+      if (code === "en") {
+        return resolve(key);
+      }
+
+      console.log(this.serviceUrl);
+
+      if (!this.serviceUrl) {
+        return resolve(key);
+      }
+
+      var url = `${this.serviceUrl}${this.serviceUrl.indexOf("?") > -1 ? "&" : "?"}q=${key}&source=en&target=${code}`;
+      console.log(url);
+
+      var response = () => {
+        try {
+          var res = JSON.parse(req.responseText);
+          console.log(res);
+          resolve(res.translation);
+        } catch (error) {
+          return reject();
+        }
+      };
+
+      var req = new window.XMLHttpRequest();
+      req.addEventListener("load", response);
+      req.open("GET", url);
+      req.send();
+    });
+  }
+
+  updateTranslations() {
+    var checkIfDone = () => {
+      var done = true;
+
+      for (var s in this.strings) {
+        if (this.strings[s] && this.strings[s].completed !== this.locales.length) {
+          done = false;
+          break;
+        }
+      }
+
+      if (done) {
+        E1.setModel(null, "@TranslationService.strings", this.strings);
+        window.localStorage.setItem("e1Translations", JSON.stringify({
+          expires: new Date().getTime() + 3600000,
+          strings: this.strings
+        }));
+      }
+    };
+
+    for (var s in this.strings) {
+      if (this.strings[s]) {
+        if (!this.strings[s].completed) {
+          this.strings[s].completed = 0;
+        }
+
+        this.locales.forEach(code => {
+          if (!this.strings[s][code]) {
+            this.getTranslation(this.strings[s].en, code).then(translation => {
+              this.strings[s][code] = translation;
+              this.strings[s].completed++;
+              checkIfDone();
+            }, () => {
+              this.strings[s][code] = this.strings[s].default;
+              this.strings[s].completed++;
+              checkIfDone();
+            });
+          } else {
+            this.strings[s].completed++;
+            checkIfDone();
+          }
+        });
+      }
+    }
+  }
+
+  setLocales(locales) {
+    E1.setModel(null, "@TranslationService.locales", locales);
+    this.updateTranslations();
+  }
+
+}
+
+E1.registerService("TranslationService", new TranslationService());
+
+class E1Translate {
+  constructor(el) {
+    this.el = el;
+    this.el["e1-translate"] = this.update;
+    this.el.translationKey = this.el.textContent.split(".").join("&period;");
+
+    if (!this.el.getAttribute("e1-translate")) {
+      this.el.setAttribute("e1-translate", `@TranslationService.strings.${this.el.translationKey}.default`);
+      E1.setModel(null, `@TranslationService.strings.${this.el.translationKey}.en`, this.el.textContent);
+      E1.setModel(null, `@TranslationService.strings.${this.el.translationKey}.default`, this.el.textContent);
+      var newEl = this.el.cloneNode(true);
+      this.el.parentNode.insertBefore(newEl, this.el);
+      this.el.parentNode.removeChild(this.el);
+    } else {
+      this.update();
+    }
+  }
+
+  update() {
+    this.el.innerHTML = "";
+    this.el.appendChild(E1.cleanHtml(`<span>${E1.services.TranslationService.get(this.el.translationKey)}</span>`));
+  }
+
+}
+
+E1.registerAttribute("e1-translate", E1Translate);
+
+/***/ }),
+/* 91 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__upload_zone__ = __webpack_require__(92);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__upload_zone_css__ = __webpack_require__(93);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__upload_zone_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__upload_zone_css__);
 
 
 
 /***/ }),
-/* 90 */
+/* 92 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5716,7 +5892,7 @@ class E1UploadZone {
 __WEBPACK_IMPORTED_MODULE_0__e1___default.a.registerComponent("e1-upload-zone", E1UploadZone);
 
 /***/ }),
-/* 91 */
+/* 93 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

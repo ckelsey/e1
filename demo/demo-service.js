@@ -314,6 +314,25 @@ class DemoService {
             width: 600
         }
 
+        this.localeValue = "en"
+        this.localeChange = (val) => {
+            E1.setModel(null, "@TranslationService.locale", val)
+        }
+
+        this.locales = [{
+            label: "en",
+            value: "en"
+        }, {
+            label: "ru",
+            value: "ru"
+        }, {
+            label: "de",
+            value: "de"
+        }, {
+            label: "zh-CN",
+            value: "zh-CN"
+        }]
+
         this.page = {}
 
         this.utilities = [
@@ -345,6 +364,7 @@ class DemoService {
             "e1-select",
             "e1-short-number",
             "e1-tooltip",
+            "e1-translate",
             "e1-upload-zone"
         ]
 
