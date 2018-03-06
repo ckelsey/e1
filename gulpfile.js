@@ -221,7 +221,13 @@ gulp.task('publish', function (done) {
 							console.log(stdout);
 							console.log(stderr);
 
-							done()
+							exec(`npm publish`, function (err, stdout, stderr) {
+								console.log(stdout);
+								console.log(stderr);
+
+								done()
+
+							});
 
 						});
 					});
