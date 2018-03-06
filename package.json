@@ -1,7 +1,7 @@
 {
 	"name": "e1-lib",
 	"description": "",
-	"version": "1.0.16",
+	"version": "1.0.17",
 	"main": "dist/index.js",
 	"homepage": "https://ckelsey.github.io/e1/",
 	"repository": {
