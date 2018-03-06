@@ -1,19 +1,19 @@
-const E1 = require("../e1")
+const E1 = require(`../e1`)
 
 class TranslationService {
 
     constructor() {
         this.strings = {}
-        this.locale = "en"
+        this.locale = `en`
         this.locales = [
-            "en"
+            `en`
         ]
         this.serviceUrl = null
 
         var fetchTimer = null
         var lastUpdate = null
 
-        E1.subscribe("@TranslationService.locale", (res) => {
+        E1.subscribe(`@TranslationService.locale`, (res) => {
             for (var s in this.strings) {
                 if (this.strings[s]) {
                     this.strings[s].default = this.strings[s][res]
@@ -21,10 +21,10 @@ class TranslationService {
             }
 
             E1.setModel(null, `@TranslationService.strings`, this.strings)
-            window.localStorage.setItem("e1Locale", res)
+            window.localStorage.setItem(`e1Locale`, res)
         })
 
-        E1.subscribe("@TranslationService.strings", () => {
+        E1.subscribe(`@TranslationService.strings`, () => {
 
             clearTimeout(fetchTimer)
 
@@ -38,12 +38,12 @@ class TranslationService {
             }, 1000)
         })
 
-        if (window.localStorage.getItem("e1Locale")) {
-            this.locale = window.localStorage.getItem("e1Locale")
+        if (window.localStorage.getItem(`e1Locale`)) {
+            this.locale = window.localStorage.getItem(`e1Locale`)
         }
 
-        if (window.localStorage.getItem("e1Translations")) {
-            var data = JSON.parse(window.localStorage.getItem("e1Translations"))
+        if (window.localStorage.getItem(`e1Translations`)) {
+            var data = JSON.parse(window.localStorage.getItem(`e1Translations`))
 
             if (new Date().getTime() < data.expires) {
 
@@ -59,7 +59,7 @@ class TranslationService {
     getTranslation(key, code) {
         return new Promise((resolve, reject) => {
 
-            if (code === "en") {
+            if (code === `en`) {
                 return resolve(key)
             }
 
@@ -69,7 +69,7 @@ class TranslationService {
                 return resolve(key)
             }
 
-            var url = `${this.serviceUrl}${this.serviceUrl.indexOf("?") > -1 ? "&" : "?"}q=${key}&source=en&target=${code}`
+            var url = `${this.serviceUrl}${this.serviceUrl.indexOf(`?`) > -1 ? "&" : "?"}q=${key}&source=en&target=${code}`
             console.log(url)
             var response = () => {
                 try {
@@ -82,8 +82,8 @@ class TranslationService {
             }
 
             var req = new window.XMLHttpRequest()
-            req.addEventListener("load", response)
-            req.open("GET", url)
+            req.addEventListener(`load`, response)
+            req.open(`GET`, url)
             req.send()
         })
     }
@@ -100,9 +100,28 @@ class TranslationService {
             }
 
             if (done) {
-                E1.setModel(null, "@TranslationService.strings", this.strings)
-                window.localStorage.setItem("e1Translations", JSON.stringify({ expires: new Date().getTime() + 3600000, strings: this.strings }))
+                E1.setModel(null, `@TranslationService.strings`, this.strings)
+                window.localStorage.setItem(`e1Translations`, JSON.stringify({ expires: new Date().getTime() + 3600000, strings: this.strings }))
             }
+        }
+
+        var getTranslations = (s) => {
+            this.locales.forEach((code) => {
+                if (!this.strings[s][code]) {
+                    this.getTranslation(this.strings[s].en, code).then((translation) => {
+                        this.strings[s][code] = translation
+                        this.strings[s].completed++
+                        checkIfDone()
+                    }, () => {
+                        this.strings[s][code] = this.strings[s].default
+                        this.strings[s].completed++
+                        checkIfDone()
+                    })
+                } else {
+                    this.strings[s].completed++
+                    checkIfDone()
+                }
+            })
         }
 
         for (var s in this.strings) {
@@ -112,33 +131,18 @@ class TranslationService {
                     this.strings[s].completed = 0
                 }
 
-                this.locales.forEach((code) => {
-                    if (!this.strings[s][code]) {
-                        this.getTranslation(this.strings[s].en, code).then((translation) => {
-                            this.strings[s][code] = translation
-                            this.strings[s].completed++
-                            checkIfDone()
-                        }, () => {
-                            this.strings[s][code] = this.strings[s].default
-                            this.strings[s].completed++
-                            checkIfDone()
-                        })
-                    } else {
-                        this.strings[s].completed++
-                        checkIfDone()
-                    }
-                })
+                getTranslations(s)
             }
         }
     }
 
     setLocales(locales) {
-        E1.setModel(null, "@TranslationService.locales", locales)
+        E1.setModel(null, `@TranslationService.locales`, locales)
         this.updateTranslations()
     }
 }
 
-E1.registerService("TranslationService", new TranslationService())
+E1.registerService(`TranslationService`, new TranslationService())
 
 
 
@@ -152,11 +156,11 @@ E1.registerService("TranslationService", new TranslationService())
 class E1Translate {
     constructor(el) {
         this.el = el
-        this.el["e1-translate"] = this.update
-        this.el.translationKey = this.el.textContent.split(".").join("&period;")
+        this.el[`e1-translate`] = this.update
+        this.el.translationKey = this.el.textContent.split(`.`).join(`&period;`)
 
-        if (!this.el.getAttribute("e1-translate")) {
-            this.el.setAttribute("e1-translate", `@TranslationService.strings.${this.el.translationKey}.default`)
+        if (!this.el.getAttribute(`e1-translate`)) {
+            this.el.setAttribute(`e1-translate`, `@TranslationService.strings.${this.el.translationKey}.default`)
             E1.setModel(null, `@TranslationService.strings.${this.el.translationKey}.en`, this.el.textContent)
             E1.setModel(null, `@TranslationService.strings.${this.el.translationKey}.default`, this.el.textContent)
             var newEl = this.el.cloneNode(true)
@@ -168,9 +172,9 @@ class E1Translate {
     }
 
     update() {
-        this.el.innerHTML = ""
+        this.el.innerHTML = ``
         this.el.appendChild(E1.cleanHtml(`<span>${E1.services.TranslationService.get(this.el.translationKey)}</span>`))
     }
 }
 
-E1.registerAttribute("e1-translate", E1Translate)
+E1.registerAttribute(`e1-translate`, E1Translate)
