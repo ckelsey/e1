@@ -18,6 +18,7 @@ var WebpackDevServer = require('webpack-dev-server')
 var config = require('./webpack.config.js');
 var compiler = webpack(config);
 var fs = require('fs')
+var exec = require('child_process').exec;
 
 var paths = {
 	watch: ["./src/*,", "./src/**/*", "./demo/*", "./e2e/*"],
@@ -157,6 +158,61 @@ gulp.task('moveDocs', function () {
 
 gulp.task('index', function (done) {
 	fs.writeFile('dist/index.js', 'import "./e1.js"; import "./e1.css";', done)
+});
+
+gulp.task('publish', function (done) {
+	var pkg = require("./package.json")
+	var ver = pkg.version.split(`.`).map((num) => { return parseInt(num) })
+	var args = process.argv
+
+	if (args.indexOf(`-breaking`) > -1) {
+		ver[0] = ver[0] + 1
+		ver[1] = 0
+		ver[2] = 0
+	}
+
+	if (args.indexOf(`-bugfix`) > -1) {
+		ver[1] = ver[1] + 1
+		ver[2] = 0
+	}
+
+	if (args.indexOf(`-feature`) > -1) {
+		ver[2] = ver[2] + 1
+	}
+
+	pkg.version = ver.join(`.`)
+
+	fs.writeFile('package.json', JSON.stringify(pkg, null, "\t"), function () { })
+
+	var prodConfig = Object.create(config);
+	prodConfig.plugins = prodConfig.plugins.concat(
+		new webpack.DefinePlugin({
+			'process.env': {
+				'NODE_ENV': JSON.stringify('production')
+			}
+		}),
+		new webpack.optimize.UglifyJsPlugin()
+	);
+
+	// run webpack
+	webpack(prodConfig, function (err, stats) {
+		if (err) throw new gutil.PluginError('webpack:build', err);
+		gutil.log('[webpack:build]', stats.toString({
+			colors: true
+		}));
+
+		exec('git commit -a -m "build"', function (err, stdout, stderr) {
+			console.log(stdout);
+			console.log(stderr);
+
+			exec('git push', function (err, stdout, stderr) {
+				console.log(stdout);
+				console.log(stderr);
+
+				done()
+			});
+		});
+	});
 });
 
 gulp.task("dev", ["webpack", "server", "jshint", "moveDocs", "demoService", "e2e", "index"], function () {
