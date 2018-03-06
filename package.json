@@ -1,7 +1,7 @@
 {
   "name": "e1",
   "description": "",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "main": "dist/index.js",
   "homepage": "https://ckelsey.github.io/e1/",
   "repository": {
