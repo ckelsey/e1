@@ -1,4 +1,4 @@
-const vm = require('vm');
+const vm = require(`vm`);
 
 class E1 {
 	constructor() {
@@ -42,7 +42,7 @@ class E1 {
 					var elements = element.querySelectorAll(componentName)
 
 					if (!elements.length) {
-						elements = element.querySelectorAll("[" + componentName + "]")
+						elements = element.querySelectorAll(`[${componentName}]`)
 					}
 
 
@@ -79,13 +79,13 @@ class E1 {
 
 	cleanHtml(html, contextNode) {
 		html = html ? html.toString()
-			.replace(/<script[^>]*?>.*?<\/script>/gi, "")
-			.replace(/<style[^>]*?>.*?<\/style>/gi, "")
-			.replace(/<![\s\S]*?--[ \t\n\r]*>/gi, "")
-			: ""
+			.replace(/<script[^>]*?>.*?<\/script>/gi, ``)
+			.replace(/<style[^>]*?>.*?<\/style>/gi, ``)
+			.replace(/<![\s\S]*?--[ \t\n\r]*>/gi, ``)
+			: ``
 
 		var match = /<\s*\w.*?>/g.exec(html)
-		var element = window.document.createElement('div')
+		var element = window.document.createElement(`div`)
 
 		if (match !== null) {
 			if (contextNode && contextNode.parentNode) {
@@ -107,8 +107,8 @@ class E1 {
 
 	generateId() {
 		var generate = function () {
-			var text = ""
-			var possible = "abcdefghijklmnopqrstuvwxyz"
+			var text = ``
+			var possible = `abcdefghijklmnopqrstuvwxyz`
 
 			for (var i = 0; i < 26; i++) {
 				text += possible.charAt(Math.floor(Math.random() * possible.length))
@@ -138,7 +138,7 @@ class E1 {
 		if (element && attribute) {
 			var _path = element.getAttribute(attribute)
 
-			if (_path && _path.substring(0, 1) === "@") {
+			if (_path && _path.substring(0, 1) === `@`) {
 
 				path = _path.substring(1, _path.length)
 
@@ -150,7 +150,7 @@ class E1 {
 
 				return _path ? _path : defaultValue
 			}
-		} else if (!element && attribute && attribute.substring(0, 1) === "@") {
+		} else if (!element && attribute && attribute.substring(0, 1) === `@`) {
 			path = attribute.substring(1, attribute.length)
 		}
 
@@ -158,7 +158,7 @@ class E1 {
 			return defaultValue
 		}
 
-		path = path.split(".")
+		path = path.split(`.`)
 
 		var service = path.shift()
 
@@ -169,14 +169,14 @@ class E1 {
 			service = window
 		}
 
-		path = path.join(".")
+		path = path.join(`.`)
 
 		return this.getThis(service, path, defaultValue)
 	}
 
 	getThis(el, path, emptyVal) {
 		if (path && path.toString().split) {
-			path = [el].concat(path.toString().split("."))
+			path = [el].concat(path.toString().split(`.`))
 		} else {
 			path = [el]
 		}
@@ -186,13 +186,13 @@ class E1 {
 				return emptyVal
 			}
 
-			if (currentValue.indexOf(".") === -1 && currentValue.indexOf("(") > -1) {
+			if (currentValue.indexOf(`.`) === -1 && currentValue.indexOf(`(`) > -1) {
 				/* TODO: this gets messed up by the parsing of attrs the have multiple value bindings separated by a comma */
 				var argsString = /\((.*?)\)/g.exec(currentValue)[1]
-				var args = argsString.split(",").map((arg) => { return arg.trim() })
-				var functionName = currentValue.split("(")[0]
+				var args = argsString.split(`,`).map((arg) => { return arg.trim() })
+				var functionName = currentValue.split(`(`)[0]
 
-				if (typeof accumulator[functionName] === "function") {
+				if (typeof accumulator[functionName] === `function`) {
 					var result = accumulator[functionName].apply(accumulator, args)
 					return result
 				}
@@ -223,11 +223,11 @@ class E1 {
 		})
 
 		values.forEach(v => {
-			if (v.substring(0, 1) === "@") {
+			if (v.substring(0, 1) === `@`) {
 				var model = this.getModel(null, v)
 
 				if (isNaN(model)) {
-					expression = expression.split(v).join("'" + model + "'")
+					expression = expression.split(v).join(`'${model}'`)
 				} else {
 					expression = expression.split(v).join(model)
 				}
@@ -281,7 +281,7 @@ class E1 {
 			}
 		}
 
-		if (window.document.readyState === "complete") {
+		if (window.document.readyState === `complete`) {
 			this.components[name].scan(window.document.body)
 		}
 	}
@@ -309,7 +309,7 @@ class E1 {
 			},
 			registeredElements: [],
 			scan: (element) => {
-				var existingElements = element.querySelectorAll("[" + name + "]")
+				var existingElements = element.querySelectorAll(`[${name}]`)
 
 				if (existingElements.length) {
 					for (var i = 0; i < existingElements.length; i++) {
@@ -319,7 +319,7 @@ class E1 {
 			}
 		}
 
-		if (window.document.readyState === "complete") {
+		if (window.document.readyState === `complete`) {
 			this.components[name].scan(window.document.body)
 		}
 	}
@@ -327,9 +327,9 @@ class E1 {
 	registerElement(el) {
 		if (!el || !el.attributes) { return }
 
-		if (!el.hasAttribute("component-id")) {
-			el.setAttribute("component-id", this.generateId())
-			el["component-id"] = el.getAttribute("component-id")
+		if (!el.hasAttribute(`component-id`)) {
+			el.setAttribute(`component-id`, this.generateId())
+			el[`component-id`] = el.getAttribute(`component-id`)
 		}
 
 		var attributes = el.attributes
@@ -349,7 +349,7 @@ class E1 {
 		for (var i = 0; i < attributes.length; i++) {
 			var attributeValue = attributes[i].value
 
-			if (attributeValue.substring(0, 1) === "@") {
+			if (attributeValue.substring(0, 1) === `@`) {
 				var bindings = attributeValue.split(/(?:\(|\)|\|\||&&|<=|<|>=|>|===|!==)+/g).map(b => { return b.trim() })
 
 				handleBindings(bindings, el)
@@ -359,7 +359,7 @@ class E1 {
 
 	registerService(name, service) {
 		this.services[name] = service
-		this.updateBindings("@" + name, service)
+		this.updateBindings(`@` + name, service)
 	}
 
 	scan(element) {
@@ -380,10 +380,10 @@ class E1 {
 		if (element && attribute) {
 			var _path = element.getAttribute(attribute)
 
-			if (_path && _path.substring(0, 1) === "@") {
+			if (_path && _path.substring(0, 1) === `@`) {
 				path = _path.substring(1, _path.length)
 			}
-		} else if (!element && attribute && attribute.substring(0, 1) === "@") {
+		} else if (!element && attribute && attribute.substring(0, 1) === `@`) {
 			path = attribute.substring(1, attribute.length)
 		}
 
@@ -392,7 +392,7 @@ class E1 {
 		}
 
 		var boundPath = path
-		path = path.split(".")
+		path = path.split(`.`)
 
 		var service = path.shift()
 
@@ -403,13 +403,13 @@ class E1 {
 			service = window
 		}
 
-		path = path.join(".")
+		path = path.join(`.`)
 
 		var clone = this.getThis(service, path)
 
 		try { clone = JSON.parse(JSON.stringify(clone)) } catch (e) { }
 
-		if (value && value.substring && value.substring(0, 1) === "@") {
+		if (value && value.substring && value.substring(0, 1) === `@`) {
 			value = this.getModel(null, value, value)
 		}
 
@@ -420,21 +420,21 @@ class E1 {
 		var updated = clone
 
 		try {
-			if (typeof clone === "object" && typeof newVal === "object") {
+			if (typeof clone === `object` && typeof newVal === `object`) {
 				updated = Object.assign(clone, newVal)
 			} else if (newVal) {
 				updated = newVal
 			}
 		} catch (e) { }
 
-		this.updateBindings("@" + boundPath, updated)
+		this.updateBindings(`@` + boundPath, updated)
 
 		return newVal
 	}
 
 	setThis(el, path, val) {
 		if (path) {
-			path = [el].concat(path.split("."))
+			path = [el].concat(path.split(`.`))
 		} else {
 			path = [el]
 		}
@@ -485,7 +485,7 @@ class E1 {
 			elements.forEach(element => {
 				var isShown = window.document.body.contains(element)
 
-				if ((element.hasAttribute("e1-if") && this.isTruthy(element.getAttribute("e1-if"))) || (element.hasAttribute("e1-show") && this.isTruthy(element.getAttribute("e1-show")))) {
+				if ((element.hasAttribute(`e1-if`) && this.isTruthy(element.getAttribute(`e1-if`))) || (element.hasAttribute(`e1-show`) && this.isTruthy(element.getAttribute(`e1-show`)))) {
 					isShown = true
 				}
 
@@ -497,10 +497,10 @@ class E1 {
 			})
 		}
 
-		if (clone && typeof clone === "object") {
+		if (clone && typeof clone === `object`) {
 			for (var p in clone) {
 				if (clone.hasOwnProperty(p)) {
-					this.updateBindings(path + "." + p, clone[p])
+					this.updateBindings(`${path}.${p}`, clone[p])
 				}
 			}
 		}
@@ -511,7 +511,7 @@ window.E1 = new E1()
 
 module.exports = window.E1
 
-if (window.document.readyState === "complete") {
+if (window.document.readyState === `complete`) {
 	window.E1.observer.observe(window.document.body, {
 		attributes: true,
 		attributeOldValue: true,
@@ -522,7 +522,7 @@ if (window.document.readyState === "complete") {
 
 	window.E1.scan(window.document.body)
 } else {
-	window.document.addEventListener("DOMContentLoaded", function () {
+	window.document.addEventListener(`DOMContentLoaded`, function () {
 		window.E1.observer.observe(window.document.body, {
 			attributes: true,
 			attributeOldValue: true,
