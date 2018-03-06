@@ -1,4 +1,4 @@
-describe.only('e1-image-viewer', function () {
+describe('e1-image-viewer', function () {
 
     var images = [{
         preview: "image-screenshot-preview.png",
