@@ -8,14 +8,15 @@ const cssRules = {
 
 module.exports = {
     entry: {
-        "e1Lib": "./src/index.js",
+        "e1": "./src/index.js",
     },
+    target: 'node',
     output: {
         publicPath: "./",
         path: __dirname + "/dist",
         filename: "[name].js",
         libraryExport: 'umd',
-        // library: "e1Lib"
+        // library: "e1"
     },
     plugins: [
         new ExtractTextPlugin({ filename: '[name].css', disable: false, allChunks: true }),

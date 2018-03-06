@@ -148,8 +148,8 @@ const docs = [
 	"./demo/*.png",
 	"./demo/*.jpg",
 	"./demo/prism.js",
-	"./dist/e1Lib.js",
-	"./dist/e1Lib.css"
+	"./dist/e1.js",
+	"./dist/e1.css"
 ]
 
 gulp.task('moveDocs', function () {
@@ -157,7 +157,7 @@ gulp.task('moveDocs', function () {
 });
 
 gulp.task('index', function (done) {
-	fs.writeFile('dist/index.js', 'import "./e1Lib.js"; import "./e1Lib.css";', done)
+	fs.writeFile('dist/index.js', 'import "./e1.js"; import "./e1.css";', done)
 });
 
 gulp.task('publish', function (done) {
