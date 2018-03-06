@@ -10,13 +10,13 @@ module.exports = {
     entry: {
         "e1": "./src/index.js",
     },
-    target: 'node',
+    target: 'web',
     output: {
         publicPath: "./",
         path: __dirname + "/dist",
         filename: "[name].js",
         libraryExport: 'umd',
-        // library: "e1"
+        library: "e1"
     },
     plugins: [
         new ExtractTextPlugin({ filename: '[name].css', disable: false, allChunks: true }),

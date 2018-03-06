@@ -181,12 +181,14 @@ class DemoService {
                 label: "six"
             }]
         }
+
         this.share = {
             components: ["facebook", "twitter", "weibo"],
             url: "https://www.google.com",
             text: "Here is some text to pre-populate",
             hashtags: "e1, socialButtons"
         }
+
         this.message = {
             active: false,
             message: '<span style="display:block;font-weight:bold;font-size:21px;line-height:35px;">Error</span><span>Here is an error message</span>',
@@ -197,6 +199,7 @@ class DemoService {
                 click: "window.E1.setModel(null, '@demoService.message.active', false)"
             }]
         }
+
         this.tooltip = "Here's a tooltip"
         this.upload = {
             content: "An upload message. Drag files here or click to browse.",
