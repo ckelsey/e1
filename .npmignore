@@ -16,4 +16,4 @@ gulpfile.js
 _config.yml
 fav.png
 nightwatch.json
-webpack.config.json
+webpack.config.js
