@@ -164,6 +164,7 @@ gulp.task('publish', function (done) {
 	var pkg = require("./package.json")
 	var ver = pkg.version.split(`.`).map((num) => { return parseInt(num) })
 	var args = process.argv
+	var oldVersion = pkg.version
 
 	if (args.indexOf(`-breaking`) > -1) {
 		ver[0] = ver[0] + 1
@@ -209,7 +210,22 @@ gulp.task('publish', function (done) {
 				console.log(stdout);
 				console.log(stderr);
 
-				done()
+				if (oldVersion === pkg.version) {
+					done()
+				} else {
+					exec(`git tag -a v${pkg.version} -m "v${pkg.version}"`, function (err, stdout, stderr) {
+						console.log(stdout);
+						console.log(stderr);
+
+						exec(`git push origin v${pkg.version}`, function (err, stdout, stderr) {
+							console.log(stdout);
+							console.log(stderr);
+
+							done()
+
+						});
+					});
+				}
 			});
 		});
 	});
