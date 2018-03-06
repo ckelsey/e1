@@ -11,7 +11,7 @@ const accordianHtml = `
 </div>
 `
 
-describe('e1-accordian', function () {
+describe(`e1-accordian`, function () {
 
     let el
 
@@ -38,15 +38,15 @@ describe('e1-accordian', function () {
         })
     }
 
-    it('should open first tab once clicked', function (done) {
+    it(`should open first tab once clicked`, function (done) {
         el = window.document.body.appendChild(E1.cleanHtml(`<div>${accordianHtml}</div>`))
 
-        window.requestAnimationFrame(function(){
-            var tab1 = window.document.querySelector('[e1-accordian-toggle="one"]')
-            var content = window.document.querySelector('[e1-accordian-content="one"]')
-    
+        window.requestAnimationFrame(function () {
+            var tab1 = window.document.querySelector(`[e1-accordian-toggle="one"]`)
+            var content = window.document.querySelector(`[e1-accordian-content="one"]`)
+
             tab1.click()
-    
+
             checkHeight(content, 1500).then(function () {
                 chai.expect(tab1.className).to.equal("active-accordian")
                 chai.expect(content.className).to.equal("active-accordian")
@@ -58,9 +58,9 @@ describe('e1-accordian', function () {
         })
     })
 
-    it('should close first tab once clicked', function (done) {
-        var tab1 = window.document.querySelector('[e1-accordian-toggle="one"]')
-        var content = window.document.querySelector('[e1-accordian-content="one"]')
+    it(`should close first tab once clicked`, function (done) {
+        var tab1 = window.document.querySelector(`[e1-accordian-toggle="one"]`)
+        var content = window.document.querySelector(`[e1-accordian-content="one"]`)
 
         tab1.click()
 
@@ -75,9 +75,9 @@ describe('e1-accordian', function () {
 
     })
 
-    it('should open second tab once clicked', function (done) {
-        var tab = window.document.querySelector('[e1-accordian-toggle="two"]')
-        var content = window.document.querySelector('[e1-accordian-content="two"]')
+    it(`should open second tab once clicked`, function (done) {
+        var tab = window.document.querySelector(`[e1-accordian-toggle="two"]`)
+        var content = window.document.querySelector(`[e1-accordian-content="two"]`)
 
         tab.click()
 
@@ -91,11 +91,11 @@ describe('e1-accordian', function () {
         })
     })
 
-    it('should close second tab once third is clicked', function (done) {
-        var tab = window.document.querySelector('[e1-accordian-toggle="two"]')
-        var content = window.document.querySelector('[e1-accordian-content="two"]')
-        var tab3 = window.document.querySelector('[e1-accordian-toggle="three"]')
-        var content3 = window.document.querySelector('[e1-accordian-content="three"]')
+    it(`should close second tab once third is clicked`, function (done) {
+        var tab = window.document.querySelector(`[e1-accordian-toggle="two"]`)
+        var content = window.document.querySelector(`[e1-accordian-content="two"]`)
+        var tab3 = window.document.querySelector(`[e1-accordian-toggle="three"]`)
+        var content3 = window.document.querySelector(`[e1-accordian-content="three"]`)
 
         tab3.click()
 
