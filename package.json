@@ -2,6 +2,12 @@
   "name": "e1",
   "description": "",
   "version": "1.0.0",
+  "main": "dist/index.js",
+  "homepage": "https://ckelsey.github.io/e1/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ckelsey/e1.git"
+  },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.40",
     "@babel/preset-env": "^7.0.0-beta.40",

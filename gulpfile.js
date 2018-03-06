@@ -17,6 +17,7 @@ var jshint = require('gulp-jshint')
 var WebpackDevServer = require('webpack-dev-server')
 var config = require('./webpack.config.js');
 var compiler = webpack(config);
+var fs = require('fs')
 
 var paths = {
 	watch: ["./src/*,", "./src/**/*", "./demo/*", "./e2e/*"],
@@ -146,15 +147,19 @@ const docs = [
 	"./demo/*.png",
 	"./demo/*.jpg",
 	"./demo/prism.js",
-	"./dist/*",
-	// "./e2e/*"
+	"./dist/e1.js",
+	"./dist/e1.css"
 ]
 
 gulp.task('moveDocs', function () {
 	return gulp.src(docs).pipe(gulp.dest('./docs'))
 });
 
-gulp.task("dev", ["webpack", "server", "jshint", "moveDocs", "demoService", "e2e"], function () {
+gulp.task('index', function (done) {
+	fs.writeFile('dist/index.js', 'import "./e1.js"; import "./e1.css";', done)
+});
+
+gulp.task("dev", ["webpack", "server", "jshint", "moveDocs", "demoService", "e2e", "index"], function () {
 	gulp.watch(paths.watch, ["webpack", "jshint", "moveDocs", "demoService", "e2e"]);
 });
 

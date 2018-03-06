@@ -63,18 +63,15 @@ class TranslationService {
                 return resolve(key)
             }
 
-            console.log(this.serviceUrl)
-
             if (!this.serviceUrl) {
                 return resolve(key)
             }
 
             var url = `${this.serviceUrl}${this.serviceUrl.indexOf(`?`) > -1 ? "&" : "?"}q=${key}&source=en&target=${code}`
-            console.log(url)
+
             var response = () => {
                 try {
                     var res = JSON.parse(req.responseText)
-                    console.log(res)
                     resolve(res.translation)
                 } catch (error) {
                     return reject()
