@@ -13,7 +13,8 @@ module.exports = {
     output: {
         publicPath: "./",
         path: __dirname + "/dist",
-        filename: "[name].js"
+        filename: "[name].js",
+        libraryExport: 'default'
     },
     plugins: [
         new ExtractTextPlugin({ filename: '[name].css', disable: false, allChunks: true }),
